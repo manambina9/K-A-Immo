@@ -1,0 +1,149 @@
+.nouveaute {
+    padding: 20px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .section {
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  
+  .section h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .section h3 {
+    font-size: 20px;
+    color: #777;
+    margin-bottom: 20px;
+  }
+  
+  .cardContainer {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .card3 {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 350px;
+    text-align: center;
+    transition: transform 0.2s, width 0.2s;
+  }
+  
+  .card3.featured {
+    width: 400px;
+  }
+  
+  .card3:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .heroImage {
+    border-radius: 8px;
+    margin-bottom: 15px;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .card3 h4 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .card3 p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .card3 .price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2a9d8f;
+    margin-bottom: 10px;
+  }
+  
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  
+  .details span {
+    font-size: 16px;
+    color: #666;
+    display: flex;
+    align-items: center;
+  }
+  
+  .details span i {
+    margin-right: 8px;
+    color: #2a9d8f;
+  }
+  
+  .voirPlus {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #2a9d8f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .voirPlus:hover {
+    background-color: #21867a;
+  }
+  
+  @media (max-width: 768px) {
+    .card3 {
+      width: 100%;
+    }
+  
+    .card3.featured {
+      width: 100%;
+    }
+  
+    .cardContainer {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+.details p{
+    margin-left: 20px;
+}  
+
+.linkDetails {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #2a9d8f;
+    background-color: #f1f1f1;
+    text-decoration: none;
+    border: 1px solid #2a9d8f;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .linkDetails:hover {
+    background-color: #2a9d8f;
+    color: #fff;
+  }
+  

@@ -1,0 +1,303 @@
+.first {
+    background-image: url("/image/maison/Trano vaovao.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    text-align: left;
+    padding: 0 20px;
+    overflow: hidden;
+}
+
+.hero {
+    max-width: 600px;
+    color: #fff;
+    z-index: 1;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    width: 100%;  /* Assure que le contenu ne dépasse pas */
+    box-sizing: border-box;
+}
+
+.hero h5 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+.hero .card {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.hero .btn {
+    background-color: #ff7f50;
+    color: white;
+    font-size: 1.2rem;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.hero .btn:hover {
+    background-color: #ff5722;
+    transform: scale(1.1);
+}
+
+.hero .btn:active {
+    transform: scale(0.95);
+}
+
+/* Responsivité pour les écrans plus petits (mobiles) */
+@media (max-width: 768px) {
+    .first {
+        justify-content: center; /* Aligne le contenu au centre pour les petits écrans */
+        text-align: center; /* Centrer le texte sur les petits écrans */
+        padding: 0 15px; /* Réduit l'espace autour */
+    }
+
+    .hero {
+        max-width: 90%; /* Limite la largeur à 90% de l'écran */
+        padding: 15px; /* Réduit l'espacement intérieur */
+    }
+
+    .hero h5 {
+        font-size: 2rem; /* Réduit la taille du titre */
+        letter-spacing: 2px; /* Moins d'espacement pour les petits écrans */
+    }
+
+    .hero .card {
+        font-size: 1rem; /* Réduit la taille du texte */
+        line-height: 1.5; /* Meilleure lisibilité */
+        margin-bottom: 20px; /* Réduit l'espacement */
+    }
+
+    .hero .btn {
+        padding: 10px 25px; /* Réduit la taille du bouton */
+        font-size: 1.1rem; /* Ajuste la taille du texte */
+    }
+}
+
+/* Responsivité pour les écrans très petits (mobiles portrait) */
+@media (max-width: 480px) {
+    .hero {
+        max-width: 95%; /* Élargit un peu plus la largeur du contenu */
+    }
+
+    .hero h5 {
+        font-size: 1.8rem; /* Plus petit pour les écrans très petits */
+        letter-spacing: 1px;
+    }
+
+    .hero .card {
+        font-size: 0.95rem; /* Encore plus petit pour les petits écrans */
+    }
+
+    .hero .btn {
+        padding: 8px 20px; /* Taille du bouton réduite */
+        font-size: 1rem; /* Plus petit pour les petits écrans */
+    }
+}
+/* Assurez-vous que ce code soit dans le fichier Styles que tu utilises */
+.services h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .cardsContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Espace entre les cartes */
+    flex-wrap: wrap; /* Permet aux cartes de se replier sur la ligne suivante sur petits écrans */
+  }
+  
+  .card1, .card2 {
+    width: 600px;
+    height: 300px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative; /* Nécessaire pour positionner le filtre rouge */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    border-radius: 8px; /* Bordures arrondies */
+    background-size: cover; /* Pour que l'image occupe toute la carte */
+    background-position: center; /* Pour centrer l'image */
+    background-repeat: no-repeat; /* Pour ne pas répéter l'image */
+  }
+  
+  .card1 {
+    background-image: url("/image/maison/Trano vaovao.png"); /* Image de la carte 1 */
+  }
+  
+  .card2 {
+    background-image: url("/image/maison/Trano vaovao.png"); /* Image de la carte 2 */
+  }
+  
+  .card1::before, .card2::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    border-radius: 8px;
+  }
+
+  .card1::before {
+    background-color: rgba(46, 132, 213, 0.236);
+  }
+
+  .card2::before {
+    background-color: rgba(255, 0, 0, 0.236);
+  }
+  /* Responsivité */
+  @media (max-width: 768px) {
+    .card1, .card2 {
+      width: 100%;
+      height: 250px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .card1, .card2 {
+      width: 100%;
+      height: 200px;
+    }
+  }
+  
+  .card1 h3, .card2 h3 {
+    z-index: 2; /* Positionne le texte devant le filtre */
+    font-size: 36px; /* Augmente la taille de la police */
+    font-weight: bold;
+    margin: 0;
+    color: #fff; /* Couleur du texte */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Ombre portée pour améliorer la lisibilité */
+    font-family: 'Arial', sans-serif; /* Changer de police (tu peux aussi essayer d'autres polices) */
+    text-transform: uppercase; /* Transforme le texte en majuscules */
+    letter-spacing: 2px; /* Espacement entre les lettres pour un effet plus net */
+    padding: 10px; /* Un peu de padding pour que le texte soit bien espacé */
+    background-color: rgba(0, 0, 0, 0.3); /* Fond semi-transparent pour le texte */
+    border-radius: 5px; /* Bordures arrondies autour du texte */
+    transition: all 0.3s ease; /* Effet de transition pour l'interaction */
+  }
+  
+  /* Effet de survol pour le texte */
+  .card1 h3:hover, .card2 h3:hover {
+    transform: scale(1.1); /* Agrandit légèrement le texte au survol */
+    color: #ff6600; /* Change la couleur du texte au survol */
+    cursor: pointer; /* Change le curseur pour indiquer l'interaction */
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9); /* Accentue l'ombre portée */
+  }
+  
+  .nouveaute {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .section h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    margin-top: 50px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .section h3 {
+    font-size: 2rem;
+    color: #555;
+    margin-bottom: 20px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .cardContainer {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .card3 {
+    flex: 1;
+    max-width: 280px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .card3 h4 {
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .card3 p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  
+  .voirPlus {
+    padding: 12px 25px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center;
+    transition: background-color 0.3s;
+  }
+  
+  .voirPlus:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Responsivité */
+  @media (max-width: 768px) {
+    .cardContainer {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .card3 {
+      max-width: 100%;
+    }
+  }
+  

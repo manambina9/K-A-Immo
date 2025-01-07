@@ -1,0 +1,205 @@
+/* Styles de base inchangés */
+
+.navbar {
+    background-color: #2C3E50;
+    padding: 1rem 2rem;
+    border-bottom: 4px solid #D35400;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navBrand span {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Menu principal */
+.navLinks {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.navLinks ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navLinks li {
+    position: relative; /* Nécessaire pour le dropdown */
+}
+
+/* Style des liens */
+.navLinks a,
+.navLinks span {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.navLinks a:hover,
+.navLinks span:hover {
+    color: #D35400;
+}
+
+
+/* Dropdown Menu */
+.dropdown {
+    position: relative;
+    cursor: pointer;
+}
+
+.dropdown span {
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s;
+}
+
+.dropdown:hover span {
+    color: #f39c12;
+}
+
+.dropdownMenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #2C3E50;
+    border: 1px solid #D35400;
+    border-radius: 4px;
+    padding: 0.8rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    list-style: none;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    list-style: none;
+    min-width: 200px;
+}
+
+.dropdown:hover .dropdownMenu {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdownMenu li {
+    margin: 0.5rem 0;
+}
+
+.dropdownMenu li a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    display: block;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdownMenu li a:hover {
+    background-color: #f39c12;
+    color: white;
+}
+
+
+.dropdownMenu a {
+    color: white;
+    font-size: 0.9rem;
+}
+
+.dropdownMenu a:hover {
+    color: #D35400;
+}
+
+/* Bouton Se connecter */
+.loginButton {
+    background-color: #D35400;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.loginButton:hover {
+    background-color: #E67E22;
+}
+
+/* Mode mobile */
+@media (max-width: 768px) {
+    .navLinks {
+        display: none;
+        flex-direction: column;
+        gap: 1rem;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #2C3E50;
+        padding: 1rem;
+    }
+
+    .mobileNav.open {
+        display: flex;
+    }
+
+    .hamburger {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        cursor: pointer;
+    }
+
+    .hamburger div {
+        width: 30px;
+        height: 3px;
+        background-color: white;
+        border-radius: 2px;
+        transition: background-color 0.3s;
+    }
+
+    .hamburger:hover div {
+        background-color: #D35400;
+    }
+}
+
+.icon {
+    margin-right: 8px;
+    font-size: 1rem; /* Taille des icônes */
+    color: inherit; /* Hérite de la couleur du texte */
+}
+
+.socialLinks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 0px;
+}
+
+.socialIcon {
+    font-size: 1rem; /* Taille des icônes */
+    color: #ffffff; /* Couleur des icônes */
+    transition: color 0.3s ease;
+}
+
+.socialIcon:hover {
+    color: #00bcd4; /* Couleur au survol */
+}
