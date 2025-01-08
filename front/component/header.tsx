@@ -100,9 +100,11 @@ export default function Navbar() {
                         </Link>
                     </li>
                 </ul>
-                <button className={styles.loginButton}>
-                    <FontAwesomeIcon icon={faSignInAlt} className={styles.icon} /> Se connecter
-                </button>
+                <Link href="../SiteFront/login">
+                    <button className={styles.loginButton}>
+                        <FontAwesomeIcon icon={faSignInAlt} className={styles.icon} /> Se connecter
+                    </button>
+                </Link>
 
                 {/* Réseaux sociaux */}
                 <div className={styles.socialLinks}>
