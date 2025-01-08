@@ -1,0 +1,84 @@
+/* Footer container */
+.footer {
+    background-color: #2C3E50;  /* Fond clair pour un style minimaliste */
+    color: #333;  /* Texte sombre pour une lisibilité optimale */
+    padding: 60px 20px;
+    font-family: 'Helvetica', sans-serif;
+    text-align: center;
+    border-bottom: 4px solid #D35400;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+  
+  .left,
+  .middle,
+  .right {
+    flex: 1;
+    min-width: 250px;
+    margin: 10px;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #ffffff;  /* Couleur premium mais subtile */
+  }
+  
+  .subtitle {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #3498db;  /* Couleur bleue discrète pour les sous-titres */
+  }
+  
+  .text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #ffffff;  /* Texte clair et apaisant */
+    margin-bottom: 10px;
+  }
+  
+  .links {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .links li a {
+    text-decoration: none;
+    color: #3498db;  /* Liens de couleur bleue discrète */
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+    transition: color 0.3s ease;
+  }
+  
+  .links li a:hover {
+    color: #2980b9;  /* Lien bleu plus foncé au survol */
+  }
+  
+  .bottom {
+    margin-top: 30px;
+  }
+  
+  .copy {
+    font-size: 12px;
+    color: #999;  /* Texte de copyright léger pour ne pas surcharger */
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+    }
+    .bottom {
+      text-align: center;
+    }
+  }
+  

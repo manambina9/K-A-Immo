@@ -1,6 +1,9 @@
 import Header from "../component/header";
 import Styles from "../public/css/Home.module.css"
-import Nouveautes from "@/component/nouveau";
+import Nouveautes from "@/component/nouveau"
+import Footer from"../component/footer"
+import Loue from "../component/loue"
+import Contact from "@/component/contact";
 
 export default function Home() {
   return (
@@ -28,28 +31,11 @@ export default function Home() {
           </div>
         </div>
       </div>
-      
-      <Nouveautes />
 
-    <div className={Styles.section}>
-      <h2>NOUVEAUTÉS</h2>
-      <h3>À louer</h3>
-      <div className={Styles.cardContainer}>
-        <div className={Styles.card3}>
-          <h4>Carte 1</h4>
-          <p>Description de la carte.</p>
-        </div>
-        <div className={Styles.card3}>
-          <h4>Carte 2</h4>
-          <p>Description de la carte.</p>
-        </div>
-        <div className={Styles.card3}>
-          <h4>Carte 3</h4>
-          <p>Description de la carte.</p>
-        </div>
-      </div>
-      <button className={Styles.voirPlus}>Voir plus</button>
-    </div>
+      <Nouveautes />
+      <Loue />
+    <Contact />
+    <Footer />
     </>
   );
 }

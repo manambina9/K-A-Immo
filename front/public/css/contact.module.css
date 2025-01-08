@@ -1,0 +1,130 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 50px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    margin: auto;
+    margin-top: 10px;
+  }
+  
+  .left {
+    text-align: center;
+  }
+  
+  .left h2 {
+    font-size: 30px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 10px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .left p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  .right {
+    width: 100%;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .row {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .row input {
+    flex: 1;
+  }
+  
+  .input,
+  .textarea {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .input:hover,
+  .textarea:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .input:focus,
+  .textarea:focus {
+    border-color: #ffa500;
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 120, 215, 0.3);
+  }
+  
+  .textarea {
+    height: 120px;
+    resize: vertical;
+  }
+  
+  .radio-group {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #444;
+  }
+  
+  .radio-group input[type="radio"] {
+    margin-right: 10px;
+    accent-color: #ffa500;
+  }
+  
+  .button {
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #ffa500;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+  }
+  
+  .button:hover {
+    background-color: #005bb5;
+  }
+  
+  .button:active {
+    transform: translateY(2px);
+  }
+  
+  @media (max-width: 768px) {
+    .row {
+      flex-direction: column;
+    }
+  
+    .container {
+      padding: 30px;
+    }
+  }
+  
