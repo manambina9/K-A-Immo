@@ -14,7 +14,7 @@ class Propriete
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $titre = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
@@ -24,14 +24,14 @@ class Propriete
         return $this->id;
     }
 
-    public function getTitre(): ?string
+    public function getName(): ?string
     {
-        return $this->titre;
+        return $this->name;
     }
 
-    public function setTitre(string $titre): static
+    public function setName(string $name): static
     {
-        $this->titre = $titre;
+        $this->name = $name;
 
         return $this;
     }
