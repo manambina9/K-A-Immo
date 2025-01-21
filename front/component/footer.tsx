@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className={Styles.footer}>
       <div className={Styles.bottom}>
-        <p className={Styles.copy}>© 2025 Nom de la société. Tous droits réservés.</p>
+        <p className={Styles.copy}>© 2025 K&A Immo. Tous droits réservés.</p>
       </div>
     </footer>
   );
