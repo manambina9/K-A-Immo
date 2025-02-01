@@ -44,6 +44,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $resetToken = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $resetTokenExpiresAt = null;
 
     public function getId(): ?int
     {
@@ -122,7 +127,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getResetToken(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setResetToken(?string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
     
+    public function getResetTokenExpiresAt(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setResetTokenExpiresAt(?string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }  
+
     /**
      * @see UserInterface
      */

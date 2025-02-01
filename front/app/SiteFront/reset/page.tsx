@@ -2,34 +2,42 @@
 
 import Header from '../../../component/header';
 import { useState } from 'react';
+import LoadingOverlay from '@/component/loading';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setMessage('');
+    setError('');
+    setLoading(true);
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/reset/request', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email }),
-          });
+      const response = await fetch('http://127.0.0.1:8000/api/reset/request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
 
       const data = await response.json();
 
       if (response.ok) {
         setMessage('A reset password link has been sent to your email.');
       } else {
-        setMessage(data.message || 'Failed to send reset link.');
+        setError(data.message || 'Failed to send reset link.');
       }
     } catch (error) {
-        if (error instanceof Error){
-            setMessage('' + error.message);
-        }
+      if(error instanceof Error){
+        setError('An unexpected error occurred. Please try again later.');
+      }
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -37,6 +45,7 @@ export default function ResetPassword() {
     <>
       <Header />
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        {loading && <LoadingOverlay />}
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
             Reset your password
@@ -74,7 +83,14 @@ export default function ResetPassword() {
               </button>
             </div>
           </form>
-          {message && <p className="mt-4 text-center text-sm text-indigo-600">{message}</p>}
+
+          {message && (
+            <p className="mt-4 text-center text-sm text-green-600">{message}</p>
+          )}
+
+          {error && (
+            <p className="mt-4 text-center text-sm text-red-600">{error}</p>
+          )}
         </div>
       </div>
     </>
