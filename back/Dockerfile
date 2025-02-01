@@ -1,32 +1,31 @@
-# Utilisation de l'image officielle PHP avec Apache et Composer
+# Utiliser PHP 8.2 avec Apache
 FROM php:8.2-apache
 
-# Installer les extensions nécessaires pour Symfony
+# Installer les extensions PHP requises
 RUN apt-get update && apt-get install -y \
-    libicu-dev zip unzip git curl libpng-dev libjpeg-dev libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql gd intl opcache
-
-# Activer les modules Apache
-RUN a2enmod rewrite
+    git unzip libicu-dev libpq-dev libzip-dev \
+    && docker-php-ext-install intl pdo pdo_mysql zip
 
 # Installer Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    rm composer-setup.php
 
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
-# Copier les fichiers du projet dans l'image Docker
-COPY . /var/www/html
+# Copier le projet Symfony
+COPY . .
+
+# Corriger les permissions
+RUN chown -R www-data:www-data /var/www/html && chmod -R 777 /var/www/html
+RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/cache var/log
 
 # Installer les dépendances Symfony
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Changer les permissions pour éviter des erreurs
-RUN chown -R www-data:www-data /var/www/html/var /var/www/html/public
-
-# Exposer le port 80 pour Apache
+# Exposer le port 80 pour Railway
 EXPOSE 80
 
-# Démarrer Apache
+# Lancer Apache
 CMD ["apache2-foreground"]
