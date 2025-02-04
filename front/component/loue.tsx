@@ -8,7 +8,7 @@ export default function Nouveautes() {
       <div className={Styles.cardContainer}>
         <div className={Styles.card}>
             <Image 
-                src="/image/location/maison2.jfif"
+                src="/image/location/maison2.avif"
                 alt="Avenue des Roses"
                 className={Styles.image} 
                 width={500}

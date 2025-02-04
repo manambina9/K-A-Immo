@@ -13,7 +13,7 @@ const Nouveaute = () => {
           {/* Carte 1 */}
           <div className={`${Styles.card3} ${Styles.featured}`}>
             <Image
-              src="/image/vente/maison1.jfif"
+              src="/image/vente/maison1.png"
               alt="Maison à vendre"
               width={350}
               height={200}
@@ -43,7 +43,7 @@ const Nouveaute = () => {
           {/* Carte 2 */}
           <div className={Styles.card3}>
             <Image
-              src="/image/vente/maison2.jfif"
+              src="/image/vente/maison2.png"
               alt="Maison à vendre"
               width={350}
               height={200}
@@ -73,7 +73,7 @@ const Nouveaute = () => {
           {/* Carte 3 */}
           <div className={Styles.card3}>
             <Image
-              src="/image/vente/maison3.jfif"
+              src="/image/vente/maison3.png"
               alt="Maison à vendre"
               width={350}
               height={200}
