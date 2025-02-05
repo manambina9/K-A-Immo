@@ -1,74 +1,167 @@
+/* SECTION PRINCIPALE */
 .section {
-    background-color: #002244;
-    color: #ffffff;
-    padding: 40px;
+  background: linear-gradient(135deg, #001b40, #002244);
+  color: #ffffff;
+  padding: 50px 20px;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* TITRE PRINCIPAL */
+.titrePrincipal {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  position: relative;
+  display: inline-block;
+}
+
+/* Effet souligné sous le titre */
+.titrePrincipal::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background-color: #ffa500;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* CONTAINER DES CARTES */
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  align-items: center;
+}
+
+/* STYLE DES CARTES */
+.card {
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(0, 27, 64, 0.95);
+  border-radius: 12px;
+  overflow: hidden;
+  width: 85%;
+  max-width: 920px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Effet au survol */
+.card:hover {
+  transform: scale(1.04);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* IMAGE */
+.image {
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* CONTENU DE LA CARTE */
+.cardContent {
+  padding: 25px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+}
+
+/* TITRE DU BIEN */
+.cardContent h4 {
+  font-size: 22px;
+  color: #ffa500;
+  margin-bottom: 10px;
+}
+
+/* TEXTE DESCRIPTION */
+.cardContent p {
+  font-size: 15px;
+  margin: 6px 0;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+/* PRIX */
+.prix {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 15px;
+  color: #ffd700;
+}
+
+/* BOUTON "VOIR PLUS" */
+.voirPlus {
+  margin-top: 30px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #ffa500, #ff8500);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effet de glow au survol */
+.voirPlus:hover {
+  background: linear-gradient(135deg, #ffb700, #ff9500);
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(255, 133, 0, 0.5);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .card {
+    flex-direction: column;
+    width: 95%;
+  }
+
+  .image {
+    width: 100%;
+    height: 250px;
+  }
+
+  .cardContent {
+    width: 100%;
     text-align: center;
   }
-  
-  .titrePrincipal {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .cardContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    align-items: center;
-  }
-  
-  .card {
-    display: flex;
-    background-color: #001b40;
-    border-radius: 8px;
-    overflow: hidden;
-    width: 80%;
-    max-width: 900px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .image {
-    width: 50%;
-    height: auto;
-  }
-  
-  .cardContent {
-    padding: 20px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 50%;
-  }
-  
-  .cardContent h4 {
-    font-size: 18px;
-    color: #ffa500;
-    margin-bottom: 10px;
-  }
-  
-  .cardContent p {
-    font-size: 14px;
-    margin: 5px 0;
-  }
-  
+
   .prix {
-    font-weight: bold;
-    margin-top: 15px;
+    font-size: 20px;
   }
-  
-  .voirPlus {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #ffa500;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .voirPlus:hover {
-    background-color: #ff8500;
+  to {
+    opacity: 1;
   }
-  
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
