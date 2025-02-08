@@ -1,17 +1,42 @@
-'use client'
+"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation"; // ✅ Correction ici
 
 export default function NewPasswordForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [token, setToken] = useState<string | null>(null); // ✅ Stocke le token ici
+  const router = useRouter();
+
+  // ✅ Récupération correcte du token
+  useEffect(() => {
+    const urlToken = window.location.pathname.split("/").pop();
+    if (urlToken && urlToken !== "newpass") {
+      setToken(urlToken);
+      console.log("Token récupéré :", urlToken);
+    } else {
+      setMessage("Lien invalide ou expiré.");
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage("");
+    const urlToken = window.location.pathname.split("/").pop();
+    if (urlToken && urlToken !== "newpass") {
+      setToken(urlToken);
+      console.log("Token récupéré :", urlToken);
+    } else {
+      setMessage("Lien invalide ou expiré.");
+    }
+    if (!token) {
+      setMessage("Token invalide ou expiré.");
+      return;
+    }
 
     if (password !== confirmPassword) {
       setMessage("Les mots de passe ne correspondent pas.");
@@ -19,22 +44,25 @@ export default function NewPasswordForm() {
     }
 
     try {
-      // Example API call
-      const response = await fetch("/api/update-password", {
+      const response = await fetch(`http://localhost:8000/api/reset/reset/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
 
+      const result = await response.json();
+      console.log(result); // ✅ Affiche la réponse du backend
+
       if (response.ok) {
         setMessage("Votre mot de passe a été mis à jour avec succès.");
+        setTimeout(() => router.push("/login"), 3000); // ✅ Redirection après succès
       } else {
-        setMessage("Erreur : Veuillez réessayer.");
+        setMessage(result.message || "Erreur : Veuillez réessayer.");
       }
     } catch (error) {
-        if (error instanceof Error) {
-            setMessage("Une erreur est survenue. Veuillez réessayer.");
-        }
+      if (error instanceof Error) {
+        setMessage("Une erreur est survenue. Veuillez réessayer.");
+    }
     }
   };
 
@@ -72,13 +100,12 @@ export default function NewPasswordForm() {
 
             <Button
               type="submit"
-              className="w-full py-2 mt-4 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+              className="w-full py-2 mt-4 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+            >
               Mettre à jour le mot de passe
             </Button>
 
-            {message && (
-              <p className="mt-4 text-center text-sm text-gray-700">{message}</p>
-            )}
+            {message && <p className="mt-4 text-center text-sm text-gray-700">{message}</p>}
           </form>
         </CardContent>
       </Card>
