@@ -61,17 +61,17 @@ export default function Navbar() {
                         </span>
                         <ul className={styles.dropdownMenu}>
                             <li>
-                                <Link href="../SiteFront/Vente/Maison">
+                                <Link href="../Vente/Maison">
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Maisons
                                 </Link>
                             </li>
                             <li>
-                                <Link href="../SiteFront/Vente/Terrain">
+                                <Link href="../Vente/Terrain">
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Terrains
                                 </Link>
                             </li>
                             <li>
-                                <Link href="../SiteFront/Vente/model">
+                                <Link href="../Vente/model">
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Modélisation 3D
                                 </Link>
                             </li>
@@ -83,19 +83,19 @@ export default function Navbar() {
                         </span>
                         <ul className={styles.dropdownMenu}>
                             <li>
-                                <Link href="../SiteFront/location/Maison">
+                                <Link href="../location/Maison">
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Maisons
                                 </Link>
                             </li>
                             <li>
-                                <Link href="../SiteFront/location/Maison">
+                                <Link href="../location/Maison">
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Terrains
                                 </Link>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <Link href="../SiteFront/contact">
+                        <Link href="../contact">
                             <FontAwesomeIcon icon={faEnvelope} className={styles.icon} /> Contact
                         </Link>
                     </li>
