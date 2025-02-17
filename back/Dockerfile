@@ -32,6 +32,5 @@ EXPOSE 80
 
 # Lancer Apache
 CMD ["apache2-foreground"]
-RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 ENV APP_ENV=prod
