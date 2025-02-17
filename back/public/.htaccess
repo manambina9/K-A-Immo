@@ -1,9 +1,28 @@
-# public/.htaccess
+# .htaccess pour Symfony
+
+# Activé la réécriture d'URL
 <IfModule mod_rewrite.c>
-    Options -MultiViews
     RewriteEngine On
 
-    # Redirige toutes les requêtes vers index.php
+    # Si le fichier ou répertoire existe, ne pas réécrire l'URL
     RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Réécrire toutes les requêtes vers index.php
     RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
+
+# Autoriser l'accès à certains fichiers importants
+<FilesMatch "^\.ht">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Sécuriser les fichiers de configuration
+<Files config.php>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Autres paramètres pour la sécurité (optionnels)
+Header always unset X-Powered-By
