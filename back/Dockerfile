@@ -21,6 +21,9 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html && chmod -R 777 /var/www/html
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/cache var/log
 
+# Ajouter la directive ServerName pour éviter l'avertissement Apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Installer les dépendances Symfony
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
@@ -33,4 +36,5 @@ EXPOSE 80
 # Lancer Apache
 CMD ["apache2-foreground"]
 
+# Définir l'environnement de production
 ENV APP_ENV=prod
