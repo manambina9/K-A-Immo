@@ -18,7 +18,10 @@ WORKDIR /var/www/html
 COPY . .
 
 # Corriger les permissions
-RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html && \
+    chmod -R 777 /var/www/html/var/cache /var/www/html/var/log
+
 
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/cache var/log
 
