@@ -6,8 +6,6 @@ RUN apt-get update && apt-get install -y \
     git unzip libicu-dev libpq-dev libzip-dev \
     && docker-php-ext-install intl pdo pdo_mysql zip
 
-# Installer les dépendances Symfony
-RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Installer Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
@@ -23,6 +21,8 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html && chmod -R 777 /var/www/html
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/cache var/log
 
+# Installer les dépendances Symfony
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Vider le cache avant l'installation
 RUN php bin/console cache:clear --env=prod
