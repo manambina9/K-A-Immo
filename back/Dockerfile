@@ -37,5 +37,3 @@ EXPOSE 80
 # Lancer Apache
 CMD ["apache2-foreground"]
 
-# Définir l'environnement de production
-ENV APP_ENV=prod
