@@ -24,12 +24,14 @@ RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/cache var/log
 # Installer les dépendances Symfony
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Vider le cache avant l'installation
+RUN php bin/console cache:clear --env=prod
+
 # Exposer le port 80 pour Railway
 EXPOSE 80
 
 # Lancer Apache
 CMD ["apache2-foreground"]
-# Si on est en production, installer sans les dépendances de développement
-RUN if [ "$APP_ENV" = "prod" ]; then composer install --no-dev --optimize-autoloader --no-interaction; else composer install --optimize-autoloader --no-interaction; fi
-# Vider le cache avant l'installation
-RUN php bin/console cache:clear --env=prod
+RUN composer install --optimize-autoloader --no-interaction
+
+ENV APP_ENV=prod
