@@ -18,7 +18,8 @@ WORKDIR /var/www/html
 COPY . .
 
 # Corriger les permissions
-RUN chown -R www-data:www-data /var/www/html && chmod -R 777 /var/www/html
+RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
+
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/cache var/log
 
 # Ajouter la directive ServerName pour éviter l'avertissement Apache
