@@ -6,6 +6,9 @@ RUN apt-get update && apt-get install -y \
     git unzip libicu-dev libpq-dev libzip-dev \
     && docker-php-ext-install intl pdo pdo_mysql zip
 
+# Activer mod_rewrite pour Symfony
+RUN a2enmod rewrite
+
 # Installer Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
@@ -17,49 +20,29 @@ WORKDIR /var/www/html
 # Copier le projet Symfony
 COPY . .
 
-# Supprimer le VirtualHost par défaut et créer un nouveau qui pointe vers /public
-RUN rm /etc/apache2/sites-available/000-default.conf
-RUN echo "<VirtualHost *:80> \
-    DocumentRoot /var/www/html/public \
-    <Directory /var/www/html/public> \
-        AllowOverride All \
-        Require all granted \
-    </Directory> \
-    ErrorLog \${APACHE_LOG_DIR}/error.log \
-    CustomLog \${APACHE_LOG_DIR}/access.log combined \
-</VirtualHost>" > /etc/apache2/sites-available/000-default.conf
+# Copier le fichier de configuration Apache
+COPY apache-config/000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Activer la configuration et le module rewrite
-RUN a2ensite 000-default.conf && a2enmod rewrite
+# Activer le site Apache
+RUN a2ensite 000-default
 
-# Vérifier les permissions actuelles (optionnel)
-RUN ls -l /var/www/html
+# Vérifier et corriger les permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
-# Corriger les permissions pour éviter les erreurs 403
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 755 /var/www/html
-RUN chown -R www-data:www-data /var/www/html/public
-RUN chmod -R 755 /var/www/html/public
+# Créer et corriger les permissions des répertoires var/cache et var/log
+RUN mkdir -p var/cache var/log \
+    && chown -R www-data:www-data var/cache var/log \
+    && chmod -R 777 var/cache var/log
 
-# Créer les répertoires de cache et de log et corriger les permissions
-RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/cache var/log
-RUN chmod -R 777 var/cache var/log
-
-# Ajouter la directive ServerName pour éviter l'avertissement Apache
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
-# Installer les dépendances Symfony
+# Installer les dépendances Symfony en mode production
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Vider le cache avant l'installation
+# Vider le cache avant le lancement
 RUN php bin/console cache:clear --env=prod
 
-# Activer les logs Apache et Symfony sur Railway
-RUN ln -sf /dev/stdout /var/log/apache2/access.log
-RUN ln -sf /dev/stderr /var/log/apache2/error.log
-
-# Exposer le port 80 pour Railway
+# Exposer le port 80
 EXPOSE 80
 
-# Lancer Apache
+# Lancer Apache en premier plan
 CMD ["apache2-foreground"]
