@@ -15,15 +15,15 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
     rm composer-setup.php
 
-# Définir le répertoire de travail
-WORKDIR /var/www/html
+# Définir le répertoire de travail sur le dossier public
+WORKDIR /var/www/html/public
 
 # Copier le projet Symfony
 COPY . .
 
-# Corriger les permissions
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 775 /var/www/html
+RUN chown -R www-data:www-data /var/www/html/public
+RUN chmod -R 755 /var/www/html/public
+
 
 # Créer les répertoires de cache et de log et corriger les permissions
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/cache var/log
