@@ -17,12 +17,15 @@ WORKDIR /var/www/html
 # Copier le projet Symfony
 COPY . .
 
+# Vérifier les permissions actuelles (optionnel)
+RUN ls -l /var/www/html
+
 # Corriger les permissions
-RUN chown -R www-data:www-data /var/www/html && \
-    chmod -R 755 /var/www/html && \
-    chmod -R 777 /var/www/html/var/cache /var/www/html/var/log
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 755 /var/www/html
+RUN chmod -R 777 /var/www/html/var/cache /var/www/html/var/log
 
-
+# Créer les répertoires de cache et de log et corriger les permissions
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/cache var/log
 
 # Ajouter la directive ServerName pour éviter l'avertissement Apache
