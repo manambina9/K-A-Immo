@@ -1,25 +1,26 @@
-'use client'
+'use client';
 
-import Header from '../../../component/header'
-import Footer from '../../../component/footer'
-import { useState } from 'react'
+import Header from '../../../component/header';
+import Footer from '../../../component/footer';
+import { useState } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function Example() {
   const [username, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const { data: session } = useSession();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const userData = {
       username,
-      password
+      password,
     };
 
     try {
-      
-    //const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
       const response = await fetch('http://127.0.0.1:8000/api/login', {
         method: 'POST',
         headers: {
@@ -51,20 +52,17 @@ export default function Example() {
   return (
     <>
       <Header />
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            Sign in to your account
+      <div className="min-h-screen bg-gradient-to-r from-blue-50 to-purple-50 flex flex-col justify-center items-center px-4">
+        <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+            Connectez-vous à votre compte
           </h2>
-        </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
-                Email address
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Adresse email
               </label>
-              <div className="mt-2">
+              <div className="mt-1">
                 <input
                   id="email"
                   name="email"
@@ -73,23 +71,26 @@ export default function Example() {
                   autoComplete="email"
                   value={username}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
-                  Password
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Mot de passe
                 </label>
                 <div className="text-sm">
-                  <a href="../../SiteFront/reset" className="font-semibold #D35400 hover:text-indigo-500">
-                    Forgot password?
+                  <a
+                    href="../../SiteFront/reset"
+                    className="font-semibold text-indigo-600 hover:text-indigo-500"
+                  >
+                    Mot de passe oublié ?
                   </a>
                 </div>
               </div>
-              <div className="mt-2">
+              <div className="mt-1">
                 <input
                   id="password"
                   name="password"
@@ -98,7 +99,7 @@ export default function Example() {
                   autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -106,22 +107,69 @@ export default function Example() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
-                Sign in
+                Se connecter
               </button>
             </div>
           </form>
-          {message && <p className="text-center mt-4">{message}</p>}
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Pas encore inscrit{' '}
+          {message && <p className="mt-4 text-center text-sm text-red-600">{message}</p>}
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Pas encore inscrit ?{' '}
             <a href="../SiteFront/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
-              S{"'"}inscrire
+              Sinscrire
             </a>
           </p>
-        </div>
-      </div>
 
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Ou continuer avec</span>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-center space-x-4">
+              <button
+                onClick={() => signIn('google')}
+                className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              >
+                <Image
+                  src="/image/google-logo.png" 
+                  alt="Google"
+                  width={24}
+                  height={24}
+                />
+              </button>
+              <button
+                onClick={() => signIn('facebook')}
+                className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              >
+                <Image
+                  src="/image/facebook-logo.png" // Remplace par le chemin de ton logo Facebook
+                  alt="Facebook"
+                  width={24}
+                  height={24}
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {session && (
+          <div className="mt-8 text-center">
+            <p className="text-gray-700">Connecté en tant que {session?.user?.email}</p>
+            <button
+              onClick={() => signOut()}
+              className="mt-4 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            >
+              Se déconnecter
+            </button>
+          </div>
+        )}
+      </div>
       <Footer />
     </>
   );
