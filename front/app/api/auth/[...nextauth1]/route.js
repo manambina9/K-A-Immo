@@ -1,35 +1,20 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import FacebookProvider from "next-auth/providers/facebook";
+export default function AuthErrorPage({ searchParams }) {
+  // `searchParams` contient les paramètres de l'URL, comme `?error=OAuthSignin`
+  const error = searchParams.error;
 
-const authOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-    }),
-  ],
-  callbacks: {
-    async jwt({ token, account, profile }) {
-      if (account) {
-        token.accessToken = account.access_token;
-        token.id = profile.id;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      session.accessToken = token.accessToken;
-      session.user.id = token.id;
-      return session;
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-};
+  let errorMessage = "Une erreur s'est produite lors de l'authentification.";
 
-const handler = NextAuth(authOptions);
+  // Vous pouvez personnaliser le message d'erreur en fonction du type d'erreur
+  if (error === "OAuthSignin") {
+    errorMessage = "Une erreur s'est produite lors de la connexion avec le fournisseur OAuth.";
+  } else if (error === "Callback") {
+    errorMessage = "Une erreur s'est produite lors du callback de l'authentification.";
+  }
 
-export { handler as GET, handler as POST };
+  return (
+    <div>
+      <h1>Erreur dauthentification</h1>
+      <p>{errorMessage}</p>
+    </div>
+  );
+}
