@@ -1,20 +1,24 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import FacebookProvider from "next-auth/providers/facebook";
 
-// Configuration de NextAuth
 const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-    }),
   ],
   callbacks: {
+    async signIn({ user}) {
+      // Ici, vous pouvez ajouter une logique pour vérifier l'authentification
+      // Par exemple, vérifier si l'utilisateur est autorisé dans votre base de données Symfony
+      const isAllowed = await checkUserInSymfonyBackend(user.email); // Fonction à implémenter
+      if (isAllowed) {
+        return true; // Autoriser la connexion
+      } else {
+        return "/auth/error"; // Rediriger vers la page d'erreur
+      }
+    },
     async jwt({ token, account, profile }) {
       if (account) {
         token.accessToken = account.access_token;
@@ -28,11 +32,12 @@ const authOptions = {
       return session;
     },
   },
+  pages: {
+    error: "/auth/error", // Rediriger vers votre page d'erreur personnalisée
+  },
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-// Gestionnaire NextAuth
 const handler = NextAuth(authOptions);
 
-// Exportation des méthodes HTTP
 export { handler as GET, handler as POST };
