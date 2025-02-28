@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau message de contact</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #4a6cf7;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 0 0 5px 5px;
+            border: 1px solid #eee;
+        }
+        .field {
+            margin-bottom: 15px;
+        }
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+        .message-content {
+            background-color: white;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Nouveau message de contact</h1>
+    </div>
+    <div class="content">
+        <div class="field">
+            <span class="label">Nom:</span> 
+            <span>{{ name }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Email:</span> 
+            <span>{{ email }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Téléphone:</span> 
+            <span>{{ phone }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Sujet:</span> 
+            <span>{{ subject }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Message:</span>
+            <div class="message-content">
+                {{ message|nl2br }}
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Ce message a été envoyé via le formulaire de contact du site web.</p>
+    </div>
+</body>
+</html>

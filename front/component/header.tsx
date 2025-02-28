@@ -95,7 +95,7 @@ export default function Navbar() {
                         </ul>
                     </li>
                     <li>
-                        <Link href="../contact">
+                        <Link href="../SiteFront/contact">
                             <FontAwesomeIcon icon={faEnvelope} className={styles.icon} /> Contact
                         </Link>
                     </li>

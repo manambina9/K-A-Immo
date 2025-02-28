@@ -13,14 +13,9 @@ class Contact
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 100)]
-    #[Assert\NotBlank(message: 'Le nom ne peut pas être vide.')]
-    #[Assert\Length(max: 100, maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères.')]
-    private ?string $nom = null;
-
-    #[ORM\Column(type: 'string', length: 100)]
-    #[Assert\NotBlank(message: 'Le prénom ne peut pas être vide.')]
-    #[Assert\Length(max: 100, maxMessage: 'Le prénom ne peut pas dépasser {{ limit }} caractères.')]
-    private ?string $prenom = null;
+    #[Assert\NotBlank(message: 'Le name ne peut pas être vide.')]
+    #[Assert\Length(max: 100, maxMessage: 'Le name ne peut pas dépasser {{ limit }} caractères.')]
+    private ?string $name = null;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\NotBlank(message: 'L\'email ne peut pas être vide.')]
@@ -29,8 +24,12 @@ class Contact
 
     #[ORM\Column(type: 'string', length: 15, nullable: true)]
     #[Assert\Regex(pattern: '/^\+?[0-9]{9,15}$/', message: 'Le numéro de téléphone n\'est pas valide.')]
-    private ?string $telephone = null;
+    private ?string $phone = null;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Le sujet est obligatoire.")]
+    private $subject;
+    
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank(message: 'Le message ne peut pas être vide.')]
     #[Assert\Length(min: 10, minMessage: 'Le message doit contenir au moins {{ limit }} caractères.')]
@@ -45,27 +44,17 @@ class Contact
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getname(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(string $nom): self
+    public function setname(string $name): self
     {
-        $this->nom = $nom;
+        $this->name = $name;
         return $this;
     }
 
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): self
-    {
-        $this->prenom = $prenom;
-        return $this;
-    }
 
     public function getEmail(): ?string
     {
@@ -78,14 +67,14 @@ class Contact
         return $this;
     }
 
-    public function getTelephone(): ?string
+    public function getphone(): ?string
     {
-        return $this->telephone;
+        return $this->phone;
     }
 
-    public function setTelephone(?string $telephone): self
+    public function setphone(?string $phone): self
     {
-        $this->telephone = $telephone;
+        $this->phone = $phone;
         return $this;
     }
 
@@ -108,6 +97,26 @@ class Contact
     public function setDateEnvoi(\DateTimeInterface $dateEnvoi): self
     {
         $this->dateEnvoi = $dateEnvoi;
+        return $this;
+    }
+
+    /**
+     * Get the value of subject
+     */ 
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /**
+     * Set the value of subject
+     *
+     * @return  self
+     */ 
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+
         return $this;
     }
 }
