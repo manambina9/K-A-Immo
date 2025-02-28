@@ -20,15 +20,15 @@ const Footer = () => {
           <ul className={styles.contactList}>
             <li className={styles.contactItem}>
               <span className={styles.icon}>📍</span>
-              123 Avenue Example, Paris
+              IVB 767 Ambohimanala
             </li>
             <li className={styles.contactItem}>
               <span className={styles.icon}>📞</span>
-              +33 1 23 45 67 89
+              +261 34 84 856 35
             </li>
             <li className={styles.contactItem}>
               <span className={styles.icon}>✉️</span>
-              contact@ka-immo.fr
+              kellymanambina@gmail.com
             </li>
           </ul>
         </div>
