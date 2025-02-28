@@ -9,14 +9,13 @@ const authOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user}) {
-      // Ici, vous pouvez ajouter une logique pour vérifier l'authentification
-      // Par exemple, vérifier si l'utilisateur est autorisé dans votre base de données Symfony
+    async signIn({ user }) {
+      // Vérifiez si l'utilisateur est autorisé dans votre backend Symfony
       const isAllowed = await checkUserInSymfonyBackend(user.email); // Fonction à implémenter
       if (isAllowed) {
         return true; // Autoriser la connexion
       } else {
-        return "/auth/error"; // Rediriger vers la page d'erreur
+        return "/auth/error"; // Rediriger vers la page d'erreur personnalisée
       }
     },
     async jwt({ token, account, profile }) {
