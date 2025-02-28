@@ -1,5 +1,4 @@
 import NextAuth from "next-auth";
-import { handleAuth } from '@auth0/nextjs-auth0';
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 
@@ -37,4 +36,3 @@ const handler = NextAuth(authOptions);
 
 // Exportation des méthodes HTTP
 export { handler as GET, handler as POST };
-export const GET = handleAuth();
