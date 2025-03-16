@@ -76,58 +76,6 @@ const SAMPLE_PROPERTIES = [
   }
 ];
 
-const SERVICES = [
-  {
-    id: 1,
-    title: "Achat et Vente",
-    description: "Nous vous accompagnons dans l'achat ou la vente de votre bien immobilier.",
-    icon: "🏠"
-  },
-  {
-    id: 2,
-    title: "Location",
-    description: "Trouvez la location idéale ou mettez votre bien en location.",
-    icon: "🔑"
-  },
-  {
-    id: 3,
-    title: "Conseil en investissement",
-    description: "Des conseils experts pour maximiser vos investissements immobiliers.",
-    icon: "📈"
-  }
-];
-
-// Données d'exemple pour les avantages
-const WHY_CHOOSE_US = [
-  {
-    id: 1,
-    title: "Expertise locale",
-    description: "Notre équipe connaît parfaitement le marché immobilier de votre région.",
-    icon: "📍"
-  },
-  {
-    id: 2,
-    title: "Service personnalisé",
-    description: "Nous adaptons notre approche à vos besoins spécifiques.",
-    icon: "🤝"
-  },
-  {
-    id: 3,
-    title: "Transparence totale",
-    description: "Pas de frais cachés, tout est clair dès le début.",
-    icon: "🔍"
-  }
-];
-
-// Données d'exemple pour les partenaires
-const PARTNERS = [
-  { id: 1, logo: "/api/placeholder/150/50", name: "Partenaire 1" },
-  { id: 2, logo: "/api/placeholder/150/50", name: "Partenaire 2" },
-  { id: 3, logo: "/api/placeholder/150/50", name: "Partenaire 3" },
-  { id: 4, logo: "/api/placeholder/150/50", name: "Partenaire 4" }
-];
-
-
 export default function VenteHome() {
   const [filteredProperties, setFilteredProperties] = useState(SAMPLE_PROPERTIES);
   const [priceFilter, setPriceFilter] = useState("");
