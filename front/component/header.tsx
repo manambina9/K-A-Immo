@@ -61,17 +61,17 @@ export default function Navbar() {
                         </span>
                         <ul className={styles.dropdownMenu}>
                             <li>
-                                <Link href="../Vente/Maison">
+                                <Link href="SiteFront/Vente/Maison">
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Maisons
                                 </Link>
                             </li>
                             <li>
-                                <Link href="../Vente/Terrain">
+                                <Link href="SiteFront/Vente/Terrain">
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Terrains
                                 </Link>
                             </li>
                             <li>
-                                <Link href="../Vente/model">
+                                <Link href="SiteFront/Vente/model">
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Modélisation 3D
                                 </Link>
                             </li>
@@ -83,12 +83,12 @@ export default function Navbar() {
                         </span>
                         <ul className={styles.dropdownMenu}>
                             <li>
-                                <Link href="../location/Maison">
+                                <Link href="SiteFront/location/Maison">
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Maisons
                                 </Link>
                             </li>
                             <li>
-                                <Link href="../location/Maison">
+                                <Link href="SiteFront/location/Terrain">
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Terrains
                                 </Link>
                             </li>

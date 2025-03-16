@@ -1,13 +1,13 @@
 nelmio_cors:
     defaults:
-        allow_credentials: false
-        allow_origin: ['*']  # Autoriser toutes les origines (à adapter en production)
-        allow_headers: ['*']  # Autoriser tous les en-têtes
+        allow_credentials: true
+        allow_origin: ['http://127.0.0.1:3000']  # Autoriser uniquement ton frontend
+        allow_headers: ['Content-Type', 'Authorization']  # Autoriser ces en-têtes
         allow_methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']  # Autoriser ces méthodes
         max_age: 3600
     paths:
-        '^/api/':
-            allow_origin: ['http://127.0.0.1:3000']  # Autoriser uniquement ton frontend
-            allow_headers: ['*']
-            allow_methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+        '^/api/':  # Appliquer la configuration CORS uniquement pour les routes qui commencent par /api
+            allow_origin: ['http://127.0.0.1:3000']  # Autoriser uniquement ton frontend (même si ce n'est pas strictement nécessaire ici, ça ajoute de la sécurité)
+            allow_headers: ['Content-Type', 'Authorization']  # Garde les mêmes en-têtes ici
+            allow_methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']  # Les mêmes méthodes que dans defaults
             max_age: 3600
