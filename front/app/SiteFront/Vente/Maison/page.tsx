@@ -127,6 +127,7 @@ const PARTNERS = [
   { id: 4, logo: "/api/placeholder/150/50", name: "Partenaire 4" }
 ];
 
+
 export default function VenteHome() {
   const [filteredProperties, setFilteredProperties] = useState(SAMPLE_PROPERTIES);
   const [priceFilter, setPriceFilter] = useState("");
@@ -136,7 +137,7 @@ export default function VenteHome() {
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    let filtered = SAMPLE_PROPERTIES.filter(property => {
+    const filtered = SAMPLE_PROPERTIES.filter(property => {
       return (!priceFilter || property.price <= parseInt(priceFilter)) &&
              (!bedroomsFilter || property.bedrooms >= parseInt(bedroomsFilter));
     });
@@ -184,10 +185,10 @@ export default function VenteHome() {
                 onChange={(e) => setPriceFilter(e.target.value)}
               >
                 <option value="">Tous les prix</option>
-                <option value="250000">Jusqu'à 250 000 €</option>
-                <option value="350000">Jusqu'à 350 000 €</option>
-                <option value="450000">Jusqu'à 450 000 €</option>
-                <option value="600000">Jusqu'à 600 000 €</option>
+                <option value="250000">Jusqu&apos;à 250 000 €</option>
+                <option value="350000">Jusqu&apos;à 350 000 €</option>
+                <option value="450000">Jusqu&apos;à 450 000 €</option>
+                <option value="600000">Jusqu&apos;à 600 000 €</option>
               </select>
               <select 
                 className={styles.filterSelect}
@@ -220,8 +221,8 @@ export default function VenteHome() {
                     <Image
                       src={property.image}
                       alt={property.title}
-                      width={500} // Largeur de l'image
-                      height={300} // Hauteur de l'image
+                      width={500}
+                      height={300}
                       className={styles.propertyImage}
                     />
                     <div className={styles.propertyPrice}>{formatPrice(property.price)}</div>
