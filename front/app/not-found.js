@@ -99,12 +99,12 @@ export default function CustomError({ statusCode }) {
         <h1 className="error-title">Oups ! Quelque chose s&apos;est mal passé</h1>
         <p className="error-message">
           {statusCode
-            ? `Une erreur ${statusCode} s'est produite sur le serveur`
+            ? `Une erreur ${statusCode} s&apos;est produite sur le serveur`
             : "Nous ne trouvons pas la page que vous cherchez"}
         </p>
         <div className="error-actions">
           <Link href="/">
-            <button className="error-button">Retour à l'accueil</button>
+            <button className="error-button">Retour à l&apos;accueil</button>
           </Link>
         </div>
       </div>
