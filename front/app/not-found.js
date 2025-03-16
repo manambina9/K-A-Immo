@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useEffect } from 'react';
 import Link from 'next/link';
 
@@ -9,7 +9,7 @@ export default function CustomError({ statusCode }) {
     if (canvas) {
       const ctx = canvas.getContext('2d');
       const particles = [];
-      const particleCount = 100;
+      const particleCount = 150; // Augmenter le nombre de particules
       
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -18,25 +18,35 @@ export default function CustomError({ statusCode }) {
         constructor() {
           this.x = Math.random() * canvas.width;
           this.y = Math.random() * canvas.height;
-          this.size = Math.random() * 5 + 1;
-          this.speedX = Math.random() * 3 - 1.5;
-          this.speedY = Math.random() * 3 - 1.5;
-          this.color = `hsl(${Math.random() * 60 + 220}, 70%, 50%)`;
+          this.size = Math.random() * 4 + 1;
+          this.speedX = Math.random() * 2 - 1;
+          this.speedY = Math.random() * 2 - 1;
+          this.color = `hsla(${Math.random() * 60 + 220}, 70%, 50%, ${Math.random() * 0.5 + 0.3})`; // Ajouter de la transparence
+          this.alpha = Math.random() * 0.5 + 0.3; // Transparence aléatoire
         }
         
         update() {
           this.x += this.speedX;
           this.y += this.speedY;
           
+          // Rebondir sur les bords
           if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
           if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+          
+          // Faire disparaître et réapparaître les particules
+          this.alpha += Math.random() * 0.02 - 0.01;
+          if (this.alpha < 0.1) this.alpha = 0.1;
+          if (this.alpha > 0.8) this.alpha = 0.8;
         }
         
         draw() {
+          ctx.save();
+          ctx.globalAlpha = this.alpha;
           ctx.fillStyle = this.color;
           ctx.beginPath();
           ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
           ctx.fill();
+          ctx.restore();
         }
       }
       
@@ -48,6 +58,20 @@ export default function CustomError({ statusCode }) {
       
       const animate = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Ajouter un dégradé de fond
+        const gradient = ctx.createRadialGradient(
+          canvas.width / 2,
+          canvas.height / 2,
+          0,
+          canvas.width / 2,
+          canvas.height / 2,
+          Math.max(canvas.width, canvas.height) / 2
+        );
+        gradient.addColorStop(0, 'rgba(15, 15, 45, 0.8)');
+        gradient.addColorStop(1, 'rgba(0, 0, 20, 1)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
         for (const particle of particles) {
           particle.update();
           particle.draw();
@@ -72,7 +96,7 @@ export default function CustomError({ statusCode }) {
         <div className="error-glitch" data-text={statusCode || '405'}>
           {statusCode || '405'}
         </div>
-        <h1 className="error-title">Oups ! Quelque chose sest mal passé</h1>
+        <h1 className="error-title">Oups ! Quelque chose s'est mal passé</h1>
         <p className="error-message">
           {statusCode
             ? `Une erreur ${statusCode} s'est produite sur le serveur`
@@ -80,7 +104,7 @@ export default function CustomError({ statusCode }) {
         </p>
         <div className="error-actions">
           <Link href="/">
-            <button className="error-button">Retour à laccueil</button>
+            <button className="error-button">Retour à l'accueil</button>
           </Link>
         </div>
       </div>
@@ -91,6 +115,7 @@ export default function CustomError({ statusCode }) {
           padding: 0;
           height: 100%;
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background: #0f0f2d;
         }
         
         .error-container {
@@ -99,7 +124,6 @@ export default function CustomError({ statusCode }) {
           display: flex;
           justify-content: center;
           align-items: center;
-          background: #0f0f2d;
           color: white;
           overflow: hidden;
         }
@@ -163,12 +187,14 @@ export default function CustomError({ statusCode }) {
         .error-title {
           font-size: 2.5rem;
           margin: 1.5rem 0;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
         
         .error-message {
           font-size: 1.25rem;
           margin-bottom: 2rem;
           line-height: 1.6;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
         
         .error-button {
@@ -179,13 +205,14 @@ export default function CustomError({ statusCode }) {
           font-size: 1.1rem;
           border-radius: 50px;
           cursor: pointer;
-          transition: transform 0.3s, box-shadow 0.3s;
+          transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .error-button:hover {
           transform: translateY(-3px);
           box-shadow: 0 8px 20px rgba(99, 102, 241, 0.5);
+          background: linear-gradient(45deg, #8b5cf6, #6366f1);
         }
         
         @keyframes glitch {
