@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // Import de usePathname
 import styles from "../public/css/nav.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,9 +21,20 @@ import {
 
 export default function Navbar() {
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+    const pathname = usePathname(); // Récupère le chemin actuel
 
     const toggleMobileNav = () => {
         setIsMobileNavOpen((prevState) => !prevState);
+    };
+
+    // Fermer le menu mobile après un clic sur un lien
+    const handleLinkClick = () => {
+        setIsMobileNavOpen(false);
+    };
+
+    // Vérifier si le chemin actuel correspond à un menu principal
+    const isActive = (path: string) => {
+        return pathname.startsWith(path);
     };
 
     return (
@@ -51,56 +63,79 @@ export default function Navbar() {
             >
                 <ul>
                     <li>
-                        <Link href="/">
+                        <Link
+                            href="/"
+                            className={isActive("/") ? styles.active : ""}
+                            onClick={handleLinkClick}
+                        >
                             <FontAwesomeIcon icon={faHome} className={styles.icon} /> Accueil
                         </Link>
                     </li>
                     <li className={styles.dropdown}>
-                        <span>
+                        <span className={isActive("/SiteFront/Vente") ? styles.active : ""}>
                             <FontAwesomeIcon icon={faBuilding} className={styles.icon} /> Vente
                         </span>
                         <ul className={styles.dropdownMenu}>
                             <li>
-                                <Link href="SiteFront/Vente/Maison">
+                                <Link
+                                    href="/SiteFront/Vente/Maison"
+                                    onClick={handleLinkClick}
+                                >
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Maisons
                                 </Link>
                             </li>
                             <li>
-                                <Link href="SiteFront/Vente/Terrain">
+                                <Link
+                                    href="/SiteFront/Vente/Terrain"
+                                    onClick={handleLinkClick}
+                                >
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Terrains
                                 </Link>
                             </li>
                             <li>
-                                <Link href="SiteFront/Vente/model">
+                                <Link
+                                    href="/SiteFront/Vente/model"
+                                    onClick={handleLinkClick}
+                                >
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Modélisation 3D
                                 </Link>
                             </li>
                         </ul>
                     </li>
                     <li className={styles.dropdown}>
-                        <span>
+                        <span className={isActive("/SiteFront/location") ? styles.active : ""}>
                             <FontAwesomeIcon icon={faBuilding} className={styles.icon} /> Location
                         </span>
                         <ul className={styles.dropdownMenu}>
                             <li>
-                                <Link href="SiteFront/location/Maison">
+                                <Link
+                                    href="/SiteFront/location/Maison"
+                                    onClick={handleLinkClick}
+                                >
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Maisons
                                 </Link>
                             </li>
                             <li>
-                                <Link href="SiteFront/location/Terrain">
+                                <Link
+                                    href="/SiteFront/location/Terrain"
+                                    onClick={handleLinkClick}
+                                >
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Terrains
                                 </Link>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <Link href="../SiteFront/contact">
+                        <Link
+                            href="/SiteFront/contact"
+                            className={isActive("/SiteFront/contact") ? styles.active : ""}
+                            onClick={handleLinkClick}
+                        >
                             <FontAwesomeIcon icon={faEnvelope} className={styles.icon} /> Contact
                         </Link>
                     </li>
                 </ul>
-                <Link href="../SiteFront/login">
+                <Link href="/SiteFront/login" onClick={handleLinkClick}>
                     <button className={styles.loginButton}>
                         <FontAwesomeIcon icon={faSignInAlt} className={styles.icon} /> Se connecter
                     </button>

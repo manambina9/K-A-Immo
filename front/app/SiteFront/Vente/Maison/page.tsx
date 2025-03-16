@@ -80,6 +80,7 @@ export default function VenteHome() {
   const [filteredProperties, setFilteredProperties] = useState(SAMPLE_PROPERTIES);
   const [priceFilter, setPriceFilter] = useState("");
   const [bedroomsFilter, setBedroomsFilter] = useState("");
+  const [showLoginMessage, setShowLoginMessage] = useState(false); // État pour afficher le message
   const { isAuthenticated } = useAuth();
   const router = useRouter();
 
@@ -102,7 +103,7 @@ export default function VenteHome() {
 
   const handlePropertyClick = (propertyId: number) => {
     if (!isAuthenticated) {
-      router.push('../../SiteFront/login');
+      setShowLoginMessage(true); // Afficher le message
     } else {
       router.push(`/propriete/${propertyId}`);
     }
@@ -221,6 +222,32 @@ export default function VenteHome() {
             </div>
           )}
         </div>
+
+        {/* Message pour inviter à se connecter */}
+        {showLoginMessage && (
+        <>
+          {/* Arrière-plan semi-transparent avec flou */}
+          <div className={styles.overlay}></div>
+
+          {/* Message */}
+          <div className={styles.loginMessage}>
+            <p>Désolé, vous devez d&apos;abord vous connecter pour voir plus d&apos;informations.</p>
+            <p>
+              Si vous n&apos;avez pas encore de compte,{' '}
+              <a href="../../SiteFront/register" className={styles.link}>
+                créez-en un ici
+              </a>
+              .
+            </p>
+            <button
+              onClick={() => setShowLoginMessage(false)}
+              className={styles.closeButton}
+            >
+              Fermer
+            </button>
+          </div>
+        </>
+      )}
       </main>
       <Footer />
     </>

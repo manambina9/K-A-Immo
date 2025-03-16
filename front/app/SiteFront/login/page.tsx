@@ -3,14 +3,21 @@ import { useAuth } from '../../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Header from '../../../component/header';
 import Footer from '../../../component/footer';
-import { useState as useReactState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ConnexionPage() {
   const [username, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const { login } = useAuth(); // Utiliser le contexte d'authentification
+  const { isAuthenticated, login } = useAuth(); // Utiliser le contexte d'authentification
   const router = useRouter(); // Pour la redirection
+
+  // Rediriger l'utilisateur s'il est déjà connecté
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/User/Dashboard'); // Rediriger vers le tableau de bord
+    }
+  }, [isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,7 +40,7 @@ export default function ConnexionPage() {
 
       if (response.ok) {
         setMessage(data.message);
-        login(); // Mettre à jour l'état d'authentification
+        login(data.token); // Mettre à jour l'état d'authentification et stocker le token
         router.push('/User/Dashboard'); // Rediriger vers le tableau de bord
       } else {
         console.error('Erreur du serveur:', data);
@@ -47,6 +54,11 @@ export default function ConnexionPage() {
       }
     }
   };
+
+  // Si l'utilisateur est déjà connecté, ne pas afficher le formulaire
+  if (isAuthenticated) {
+    return null; // Ou un message de redirection
+  }
 
   return (
     <>
@@ -124,7 +136,4 @@ export default function ConnexionPage() {
       <Footer />
     </>
   );
-}
-function useState(initialValue: string): [string, React.Dispatch<React.SetStateAction<string>>] {
-  return useReactState(initialValue);
 }

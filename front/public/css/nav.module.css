@@ -204,5 +204,12 @@ margin-top: 150px;
 }
 
 .socialIcon:hover {
-    color: #00bcd4; /* Couleur au survol */
+    color: #00bcd4;
 }
+
+.active {
+    color: #D35400; 
+    font-weight: bold; 
+    border-bottom: 2px solid #D35400; 
+}
+
