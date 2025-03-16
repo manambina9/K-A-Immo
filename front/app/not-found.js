@@ -96,7 +96,7 @@ export default function CustomError({ statusCode }) {
         <div className="error-glitch" data-text={statusCode || '405'}>
           {statusCode || '405'}
         </div>
-        <h1 className="error-title">Oups ! Quelque chose s'est mal passé</h1>
+        <h1 className="error-title">Oups ! Quelque chose s&apos;est mal passé</h1>
         <p className="error-message">
           {statusCode
             ? `Une erreur ${statusCode} s'est produite sur le serveur`
