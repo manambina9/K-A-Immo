@@ -101,7 +101,9 @@ const Nouveaute = () => {
             </div>
           </div>
         </div>
-        <button className={Styles.voirPlus}>Voir plus</button>
+        <Link href="/SiteFront/Vente/Maison" className={Styles.voirPlus}>
+          Voir plus
+        </Link>
       </div>
     </div>
   );

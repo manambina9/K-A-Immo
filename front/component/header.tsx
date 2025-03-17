@@ -63,13 +63,13 @@ export default function Navbar() {
             >
                 <ul>
                     <li>
-                        <Link
-                            href="/"
-                            className={isActive("/") ? styles.active : ""}
-                            onClick={handleLinkClick}
-                        >
-                            <FontAwesomeIcon icon={faHome} className={styles.icon} /> Accueil
-                        </Link>
+                    <Link
+                        href="/" 
+                        onClick={handleLinkClick}
+                    >
+                        <FontAwesomeIcon icon={faHome} className={styles.icon} /> Accueil
+                    </Link>
+
                     </li>
                     <li className={styles.dropdown}>
                         <span className={isActive("/SiteFront/Vente") ? styles.active : ""}>
