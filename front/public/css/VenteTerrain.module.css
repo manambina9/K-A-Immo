@@ -2,7 +2,7 @@
 
 /* Hero section spécifique aux terrains */
 .terrainHero {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/image/terrain/hero-terrain.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/image/vente/terrain/hero-terrain.jpg');
     background-size: cover;
     background-position: center;
     height: 400px;

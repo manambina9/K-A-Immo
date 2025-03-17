@@ -15,7 +15,7 @@ const SAMPLE_LANDS = [
     price: 125000,
     location: "Aix-en-Provence, 13090",
     area: 850,
-    image: "/image/terrain/terrain1.jpg",
+    image: "/image/vente/terrain/terrain1.jpg",
     tags: ["Viabilisé", "Vue dégagée", "Plat"]
   },
   {
@@ -24,7 +24,7 @@ const SAMPLE_LANDS = [
     price: 95000,
     location: "Montpellier, 34070",
     area: 1200,
-    image: "/image/terrain/terrain2.jpg",
+    image: "/image/vente/terrain/terrain2.jpg",
     tags: ["Arboré", "Eau à proximité", "CU positif"]
   },
   {
@@ -33,7 +33,7 @@ const SAMPLE_LANDS = [
     price: 89000,
     location: "Toulouse, 31500",
     area: 600,
-    image: "/image/terrain/terrain3.jpg",
+    image: "/image/vente/terrain/terrain3.jpg",
     tags: ["Lotissement", "Viabilisé", "Écoles"]
   },
   {
@@ -42,7 +42,7 @@ const SAMPLE_LANDS = [
     price: 180000,
     location: "Nantes, 44300",
     area: 1800,
-    image: "/image/terrain/terrain4.jpg",
+    image: "/image/vente/terrain/terrain4.jpg",
     tags: ["Divisible", "Plat", "Résidentiel"]
   },
   {
@@ -51,7 +51,7 @@ const SAMPLE_LANDS = [
     price: 145000,
     location: "Lyon, 69009",
     area: 750,
-    image: "/image/terrain/terrain5.jpg",
+    image: "/image/vente/terrain/terrain5.jpg",
     tags: ["PC accepté", "Viabilisé", "Vue"]
   },
   {
@@ -60,7 +60,7 @@ const SAMPLE_LANDS = [
     price: 78000,
     location: "Bordeaux, 33200",
     area: 2500,
-    image: "/image/terrain/terrain6.jpg",
+    image: "/image/vente/terrain/terrain6.jpg",
     tags: ["Agricole", "Potentiel", "Eau"]
   }
 ];
