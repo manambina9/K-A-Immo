@@ -23,20 +23,15 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 COPY . .
 
 # 6. Configurer Apache
-# Après la copie des fichiers
-RUN sed -i 's#/var/www/html/public/public#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf \
-    && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
-    && a2enmod rewrite
+COPY apache-config/000-default.conf /etc/apache2/sites-available/
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
+    && a2ensite 000-default
 
 # 7. Configurer les permissions
 RUN mkdir -p var/cache var/log \
     && chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 var/ \
-    && php bin/console cache:clear --env=prod --no-warmup \
-    && php bin/console cache:warmup --env=prod
-
-# 8. Port dynamique pour Railway
-RUN echo "Listen ${PORT:-80}" > /etc/apache2/ports.conf
+    && chmod -R 775 var/ public/ \
+    && php bin/console cache:clear --env=prod
 
 EXPOSE 80
 CMD ["apache2-foreground"]
