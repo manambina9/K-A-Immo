@@ -31,5 +31,10 @@ RUN mkdir -p var/cache var/log \
     && chmod -R 775 var/ \
     && php bin/console cache:clear --env=prod
 
+# Activer le module rewrite et configurer le DocumentRoot
+RUN echo "Listen ${PORT:-80}" > /etc/apache2/ports.conf && \
+sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-enabled/000-default.conf && \
+a2enmod rewrite
+
 EXPOSE 80
 CMD ["apache2-foreground"]
