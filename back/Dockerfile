@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# 1. Configuration Apache directe
+# 1. Configuration Apache avec echo et escaping correct
 RUN echo "<VirtualHost *:80>\n\
     DocumentRoot /var/www/html/public\n\
     <Directory /var/www/html/public>\n\
@@ -25,7 +25,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 
 WORKDIR /var/www/html
 
-# 4. Préparation de l'environnement
+# 4. Préparation des permissions
 RUN mkdir -p var/cache var/log && \
     chown -R www-data:www-data /var/www && \
     chmod -R 777 /var/www
