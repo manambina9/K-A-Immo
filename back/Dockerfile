@@ -1,49 +1,42 @@
 FROM php:8.2-apache
 
-# 1. Installer les dépendances système
+# 1. Config de base Apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
+    a2enmod rewrite
+
+# 2. Dépendances PHP
 RUN apt-get update && apt-get install -y \
-    git unzip libicu-dev libzip-dev libpq-dev libonig-dev \
-    && docker-php-ext-install pdo pdo_mysql zip intl opcache mbstring \
-    && a2enmod rewrite
+    git unzip libicu-dev libzip-dev libpq-dev libonig-dev && \
+    docker-php-ext-install pdo pdo_mysql zip intl opcache mbstring
 
-# 2. Configurer le ServerName Apache
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
-# 3. Installer Composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-    && rm composer-setup.php
+# 3. Installation Composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    rm composer-setup.php
 
 WORKDIR /var/www/html
 
-# 4. Créer la structure de dossiers avec les bonnes permissions
-RUN mkdir -p var/cache var/log \
-    && chown -R www-data:www-data /var/www \
-    && chmod -R 777 /var/www
+# 4. Préparation des dossiers
+RUN mkdir -p var/cache var/log && \
+    chown -R www-data:www-data /var/www && \
+    chmod -R 775 /var/www
 
-# 5. Copier les fichiers composer
+# 5. Installation des dépendances
 COPY composer.json composer.lock ./
-
-# 6. Installer les dépendances
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
-# 7. Copier l'application
+# 6. Copie de l'application
 COPY . .
 
-# 8. Configurer Apache
-COPY apache-config/000-default.conf /etc/apache2/sites-available/
-RUN a2ensite 000-default
+# 7. Configuration finale
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 775 var/ vendor/ public/ && \
+    php bin/console cache:clear --env=prod --no-warmup && \
+    php bin/console cache:warmup --env=prod
 
-# Après la copie des fichiers dans votre Dockerfile
-RUN mkdir -p var/cache var/log \
-    && chown -R www-data:www-data var/ \
-    && chmod -R 777 var/ \
-    && php bin/console cache:clear --env=prod
-# 9. Ajuster les permissions finales
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 777 var/cache var/log \
-    && php bin/console cache:clear --env=prod --no-warmup \
-    && php bin/console cache:warmup --env=prod
+# 8. Config Apache personnalisée
+COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
+RUN a2ensite 000-default
 
 EXPOSE 80
 CMD ["apache2-foreground"]
