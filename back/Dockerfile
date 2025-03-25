@@ -26,7 +26,8 @@ COPY apache-config/000-default.conf /etc/apache2/sites-available/
 RUN a2ensite 000-default
 
 # 6. Configuration des permissions
-RUN chown -R www-data:www-data /var/www \
+RUN mkdir -p var/cache var/log \
+    && chown -R www-data:www-data /var/www \
     && chmod -R 775 var/ \
     && php bin/console cache:clear --env=prod
 
