@@ -27,11 +27,12 @@ COPY apache-config/000-default.conf /etc/apache2/sites-available/
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2ensite 000-default
 
-# 7. Configurer les permissions
+# 7. Configurer les permissions et cache
 RUN mkdir -p var/cache var/log \
     && chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 var/ public/ \
-    && php bin/console cache:clear --env=prod
+    && chmod -R 775 var/ \
+    && php bin/console cache:clear --env=prod --no-warmup \
+    && php bin/console cache:warmup --env=prod
 
 EXPOSE 80
 CMD ["apache2-foreground"]
