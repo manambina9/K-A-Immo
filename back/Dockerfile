@@ -23,9 +23,10 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 COPY . .
 
 # 6. Configurer Apache
-COPY apache-config/000-default.conf /etc/apache2/sites-available/
-RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf \
-    && a2ensite 000-default
+# Après la copie des fichiers
+RUN sed -i 's#/var/www/html/public/public#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf \
+    && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
+    && a2enmod rewrite
 
 # 7. Configurer les permissions
 RUN mkdir -p var/cache var/log \
