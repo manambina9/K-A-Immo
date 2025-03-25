@@ -1,29 +1,34 @@
 FROM php:8.2-apache
 
-# 1. Installer les dépendances système + Composer PROPERLY
+# 1. Installation des dépendances système
 RUN apt-get update && apt-get install -y \
-    git unzip libicu-dev libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql zip intl \
-    && a2enmod rewrite \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    git unzip libicu-dev libzip-dev libpq-dev libonig-dev \
+    && docker-php-ext-install pdo pdo_mysql zip intl opcache mbstring \
+    && a2enmod rewrite
 
-# 2. Configurer l'environnement
+# 2. Installation de Composer (méthode officielle)
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+    && rm composer-setup.php
+
 WORKDIR /var/www
 
-# 3. Installer les dépendances en premier (optimisation cache Docker)
+# 3. Copie et validation des fichiers composer
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer validate --no-check-all && \
+    composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
-# 4. Copier le reste de l'application
+# 4. Copie du reste de l'application
 COPY . .
 
-# 5. Configurer Apache
+# 5. Configuration Apache
 COPY apache-config/000-default.conf /etc/apache2/sites-available/
 RUN a2ensite 000-default
 
-# 6. Permissions
+# 6. Configuration des permissions
 RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 var/
+    && chmod -R 775 var/ \
+    && php bin/console cache:clear --env=prod
 
 EXPOSE 80
 CMD ["apache2-foreground"]
