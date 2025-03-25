@@ -34,6 +34,11 @@ COPY . .
 COPY apache-config/000-default.conf /etc/apache2/sites-available/
 RUN a2ensite 000-default
 
+# Après la copie des fichiers dans votre Dockerfile
+RUN mkdir -p var/cache var/log \
+    && chown -R www-data:www-data var/ \
+    && chmod -R 777 var/ \
+    && php bin/console cache:clear --env=prod
 # 9. Ajuster les permissions finales
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 777 var/cache var/log \
