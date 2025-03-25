@@ -13,26 +13,28 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 WORKDIR /var/www/html
 
-# 3. Copier les fichiers composer
+# 3. Préparer les dossiers de cache AVANT la copie
+RUN mkdir -p var/cache var/log \
+    && chown -R www-data:www-data var/ \
+    && chmod -R 777 var/
+
+# 4. Copier les fichiers composer
 COPY composer.json composer.lock ./
 
-# 4. Installer les dépendances
+# 5. Installer les dépendances
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
-# 5. Copier l'application
+# 6. Copier l'application
 COPY . .
 
-# 6. Configurer Apache
+# 7. Configurer Apache
 COPY apache-config/000-default.conf /etc/apache2/sites-available/
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2ensite 000-default
 
-# 7. Configurer les permissions
-RUN mkdir -p var/cache var/log \
-    && chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 var/ vendor/ public/ \
-    && php bin/console cache:clear --env=prod --no-warmup \
-    && php bin/console cache:warmup --env=prod
+# 8. Finaliser les permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 777 var/cache var/log
 
 EXPOSE 80
 CMD ["apache2-foreground"]
