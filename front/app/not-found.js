@@ -93,8 +93,8 @@ export default function CustomError({ statusCode }) {
     <div className="error-container">
       <canvas id="error-canvas" className="error-canvas"></canvas>
       <div className="error-content">
-        <div className="error-glitch" data-text={statusCode || '405'}>
-          {statusCode || '405'}
+        <div className="error-glitch" data-text={statusCode || '404'}>
+          {statusCode || '404'}
         </div>
         <h1 className="error-title">Oups ! Quelque chose s&apos;est mal passé</h1>
         <p className="error-message">

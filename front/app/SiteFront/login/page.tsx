@@ -40,7 +40,7 @@ export default function ConnexionPage() {
 
       if (response.ok) {
         setMessage(data.message);
-        login(data.token); // Mettre à jour l'état d'authentification et stocker le token
+        login(data.token, data.user); // Mettre à jour l'état d'authentification et stocker le token
         router.push('/User/Dashboard'); // Rediriger vers le tableau de bord
       } else {
         console.error('Erreur du serveur:', data);

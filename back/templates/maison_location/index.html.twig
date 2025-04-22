@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MaisonLocation index{% endblock %}
+
+{% block body %}
+    <h1>MaisonLocation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Ville</th>
+                <th>CodePostal</th>
+                <th>Description</th>
+                <th>Prix</th>
+                <th>Surface</th>
+                <th>NbChambres</th>
+                <th>Disponible</th>
+                <th>DateDisponibilite</th>
+                <th>Type</th>
+                <th>Image</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for maison_location in maison_locations %}
+            <tr>
+                <td>{{ maison_location.id }}</td>
+                <td>{{ maison_location.nom }}</td>
+                <td>{{ maison_location.adresse }}</td>
+                <td>{{ maison_location.ville }}</td>
+                <td>{{ maison_location.codePostal }}</td>
+                <td>{{ maison_location.description }}</td>
+                <td>{{ maison_location.prix }}</td>
+                <td>{{ maison_location.surface }}</td>
+                <td>{{ maison_location.nbChambres }}</td>
+                <td>{{ maison_location.disponible ? 'Yes' : 'No' }}</td>
+                <td>{{ maison_location.dateDisponibilite ? maison_location.dateDisponibilite|date('Y-m-d') : '' }}</td>
+                <td>{{ maison_location.type }}</td>
+                <td>{{ maison_location.image }}</td>
+                <td>{{ maison_location.latitude }}</td>
+                <td>{{ maison_location.longitude }}</td>
+                <td>
+                    <a href="{{ path('app_maison_location_show', {'id': maison_location.id}) }}">show</a>
+                    <a href="{{ path('app_maison_location_edit', {'id': maison_location.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="16">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_maison_location_new') }}">Create new</a>
+{% endblock %}

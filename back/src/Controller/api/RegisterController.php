@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\api;
 
 use App\Entity\User;
@@ -23,34 +24,64 @@ class RegisterController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher, 
         Security $security, 
         EntityManagerInterface $entityManager
-        ): JsonResponse
+    ): JsonResponse
     {
-
-         if($this->getUser()){
-            return new JsonResponse($serializer->serialize(['message'=>'Vous devez vous deconnecter avant de continuer'],'json'),Response::HTTP_UNAUTHORIZED,[],true);
+        // Si l'utilisateur est déjà connecté
+        if ($this->getUser()) {
+            return new JsonResponse(
+                $serializer->serialize(['message' => 'Vous devez vous deconnecter avant de continuer'], 'json'),
+                Response::HTTP_UNAUTHORIZED,
+                [],
+                true
+            );
         }
 
+        // Désérialiser la requête pour créer un objet User
         $newuser = $serializer->deserialize($request->getContent(), User::class, 'json');
 
+        // Validation des données de l'utilisateur
         $error = $validator->validate($newuser);
 
-        if($error->count()>0){
-            return new JsonResponse($serializer->serialize($error, 'json'), Response::HTTP_BAD_REQUEST , [] , true);
+        if ($error->count() > 0) {
+            return new JsonResponse(
+                $serializer->serialize($error, 'json'),
+                Response::HTTP_BAD_REQUEST,
+                [],
+                true
+            );
         }
 
-        $getPassword = $newuser->getPassword(); 
+        // Récupérer le mot de passe en clair (plainPassword)
         $getPlainPassword = $newuser->getPlainPassword();
 
-            // encode the plain password
-            $newuser->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $newuser, 
-                    $getPassword,
-                    $getPlainPassword
-                ));
-            $entityManager->persist($newuser);
-            $entityManager->flush();
+        // Vérifier si le mot de passe est présent
+        if (!$getPlainPassword) {
+            return new JsonResponse(
+                $serializer->serialize(['message' => 'Le mot de passe ne peut pas être vide'], 'json'),
+                Response::HTTP_BAD_REQUEST,
+                [],
+                true
+            );
+        }
 
-            return new JsonResponse($serializer->serialize(['message'=>'votre compte a ete cree avec success'], 'json'), Response::HTTP_OK, ['accept'=> 'application/json'] , true);
+        // Hacher le mot de passe et le définir pour l'utilisateur
+        $newuser->setPassword(
+            $userPasswordHasher->hashPassword(
+                $newuser, // L'objet utilisateur
+                $getPlainPassword // Le mot de passe en clair
+            )
+        );
+
+        // Persist et sauvegarde de l'utilisateur dans la base de données
+        $entityManager->persist($newuser);
+        $entityManager->flush();
+
+        // Réponse de succès
+        return new JsonResponse(
+            $serializer->serialize(['message' => 'Votre compte a été créé avec succès'], 'json'),
+            Response::HTTP_OK,
+            ['accept' => 'application/json'],
+            true
+        );
     }
 }

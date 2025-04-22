@@ -14,7 +14,7 @@ class LoginController extends AbstractController
     public function ApiLogin(Request $request): JsonResponse
     {
         $content = $request->getContent();
-        error_log("Données reçues : " . $content); // Ajoute un log
+        error_log("Données reçues : " . $content);
         
         $data = json_decode($content, true);
         if ($data === null && json_last_error() !== JSON_ERROR_NONE) {

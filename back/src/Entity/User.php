@@ -7,6 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\MaisonLocation;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'user')]
@@ -23,6 +27,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     /**
+     * @var string The user identifier
+     */
+    #[ORM\Column(length: 255, unique: true)]
+    #[Assert\Length(min: 3, max: 255, minMessage: "Le nom d'utilisateur doit comporter au moins {{ limit }} caractères.", maxMessage: "Le nom d'utilisateur ne peut pas dépasser {{ limit }} caractères.")]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9_]+$/', message: "Le nom d'utilisateur ne peut contenir que des lettres, des chiffres et des underscores.")]
+
+    private ?string $Username = null;
+
+    /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
@@ -34,11 +47,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-        /**
-     * @var string|null
-     * @Assert\NotBlank(message="Le mot de passe ne peut pas être vide.")
-     * @Assert\Length(min=8, minMessage="Le mot de passe doit comporter au moins {{ limit }} caractères.")
+    /**
+     * Mot de passe en clair (non persisté)
      */
+    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
+    #[Assert\Length(min: 8, minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères.")]
     private ?string $plainPassword = null;
 
     #[ORM\Column]
@@ -49,6 +62,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $resetTokenExpiresAt = null;
+
+    #[ORM\OneToMany(mappedBy: "proprietaire", targetEntity: MaisonLocation::class, orphanRemoval: true, cascade: ['persist'])]
+    private Collection $maisons;
+
+    public function __construct()
+    {
+        $this->roles = [];
+        $this->maisons = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -63,56 +86,58 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
+    public function getUsername(): ?string
+    {
+        return $this->Username;
+    }
+    
+    public function setUsername(string $Username): static
+    {
+        $this->Username = $Username;
+        return $this;
+    }
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     *
-     * @return list<string>
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
+    public function getPasswordField(): ?string
+    {
+        return $this->Password;
+    }
+
+    public function setPasswordField(?string $Password): static
+    {
+        $this->plainPassword = $Password; // Map automatiquement vers plainPassword
+        $this->Password = $Password;
+        return $this;
+    }
+
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
@@ -124,41 +149,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPlainPassword(?string $plainPassword): static
     {
         $this->plainPassword = $plainPassword;
-
         return $this;
     }
 
     public function getResetToken(): ?string
     {
-        return $this->plainPassword;
+        return $this->resetToken;
     }
 
-    public function setResetToken(?string $plainPassword): static
+    public function setResetToken(?string $resetToken): static
     {
-        $this->plainPassword = $plainPassword;
-
+        $this->resetToken = $resetToken;
         return $this;
     }
-    
-    public function getResetTokenExpiresAt(): ?string
+
+    public function getResetTokenExpiresAt(): ?\DateTimeInterface
     {
-        return $this->plainPassword;
+        return $this->resetTokenExpiresAt;
     }
 
-    public function setResetTokenExpiresAt(?string $plainPassword): static
+    public function setResetTokenExpiresAt(?\DateTimeInterface $expiresAt): static
     {
-        $this->plainPassword = $plainPassword;
-
+        $this->resetTokenExpiresAt = $expiresAt;
         return $this;
-    }  
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 
     public function isVerified(): bool
@@ -169,6 +182,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Nettoyage du mot de passe en clair
+        $this->plainPassword = null;
+    }
+
+        /**
+     * @return Collection<int, MaisonLocation>
+     */
+    public function getMaisons(): Collection
+    {
+        return $this->maisons;
+    }
+
+    public function addMaison(MaisonLocation $maison): static
+    {
+        if (!$this->maisons->contains($maison)) {
+            $this->maisons[] = $maison;
+            $maison->setProprietaire($this); // ⚠️ important !
+        }
+
+        return $this;
+    }
+
+    public function removeMaison(MaisonLocation $maison): static
+    {
+        if ($this->maisons->removeElement($maison)) {
+            // set the owning side to null (unless already changed)
+            if ($maison->getProprietaire() === $this) {
+                $maison->setProprietaire(null);
+            }
+        }
 
         return $this;
     }

@@ -12,36 +12,35 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Vérification si les mots de passe correspondent
+  
     if (password !== password1) {
       setMessage("Les mots de passe ne correspondent pas.");
       return;
     }
-
+  
     const userData = {
       email,
-      password,
-      password1
+      plainPassword: password
     };
-
+  
     try {
+      console.log("Data sent to API:", userData);
       const response = await fetch('http://localhost:8000/api/register', {
         method: 'POST',
         headers: {
-          'content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         setMessage(data.message);
         window.location.href = '../../SiteFront/login';
       } else {
         console.error('Erreur : ' + data.message);
-        setMessage(data.message); // Afficher le message d'erreur du backend
+        setMessage(data.message);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -51,6 +50,7 @@ export default function Register() {
       }
     }
   };
+  
 
   return (
     <>

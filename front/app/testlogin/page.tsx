@@ -11,13 +11,8 @@ export default function Auth() {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  // Effet de suivi de la souris pour l'animation du fond
+ 
   useEffect(() => {
-    interface MousePosition {
-      x: number;
-      y: number;
-    }
 
     const handleMouseMove = (e: MouseEvent): void => {
       setMousePosition({ x: e.clientX, y: e.clientY });
@@ -255,7 +250,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> 
                       </div>
                       
                       <div className={styles.forgotPassword}>
-                        <a href="#" className={styles.link}>
+                        <a href="forgotPass" className={styles.link}>
                           Mot de passe oublié?
                         </a>
                       </div>
@@ -292,13 +287,19 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> 
             <div className={styles.footer}>
               <p className={styles.switchText}>
                 {isLogin ? 'Pas encore de compte? ' : 'Déjà un compte? '}
+                {isLogin ? (
+                  <span className={styles.switchLink} onClick={() => setIsLogin(false)}>S'inscrire</span>
+                ) : (
+                  <span className={styles.switchLink} onClick={() => setIsLogin(true)}>Se connecter</span>
+                )}
+                
                 <motion.button 
                   onClick={() => setIsLogin(!isLogin)} 
                   className={styles.switchLink}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {isLogin ? 'S\'inscrire' : 'Se connecter'}
+                  {isLogin ? '.' : '.'}
                 </motion.button>
               </p>
               

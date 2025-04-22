@@ -1,0 +1,387 @@
+/* Variables de couleur */
+:root {
+    --primary-color: #D35400;
+    --secondary-color: #2C3E50;
+    --accent-color: #e67e22;
+    --text-color: #2C3E50;
+    --light-bg: #ffffff;
+  }
+  
+  /* Styles de base */
+  .clientContainer {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .mainContent {
+    flex: 1;
+    padding: 2rem;
+    margin-left: 280px; /* Largeur de la sidebar */
+    transition: margin-left 0.3s ease;
+  }
+  
+  .loading, .error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: var(--text-color);
+  }
+  
+  .noResults {
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--light-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+    color: var(--text-color);
+  }
+  
+  .noResults h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+  
+  /* Animation pour les cartes de propriété */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .propertyGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .mainContent {
+      margin-left: 0;
+      padding: 1rem;
+    }
+    
+    .propertyGrid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .propertyGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ClientHeader styles */
+.clientHeader {
+    background-color: var(--light-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+  
+  .welcomeMessage h1 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+  }
+  
+  .welcomeMessage p {
+    color: var(--text-color);
+    opacity: 0.8;
+    font-size: 1rem;
+  }
+  
+  .clientPreferences {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+  }
+  
+  .preferenceTag {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .preferenceTag span {
+    font-weight: bold;
+    margin-right: 0.3rem;
+  }
+  
+  /* PropertyCard styles */
+  .propertyCard {
+    background-color: var(--light-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+  
+  .propertyCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .propertyCard.reserved {
+    opacity: 0.8;
+  }
+  
+  .reservedBadge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    z-index: 2;
+  }
+  
+  .propertyImage {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  
+  .favoriteButton {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 2;
+  }
+  
+  .favoriteButton:hover {
+    color: var(--accent-color);
+    background-color: white;
+  }
+  
+  .favoriteButton.favorited {
+    color: var(--primary-color);
+  }
+  
+  .imageOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(211, 84, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .propertyCard:hover .imageOverlay {
+    opacity: 1;
+  }
+  
+  .detailsButton {
+    background-color: white;
+    color: var(--primary-color);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .detailsButton:hover {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  .propertyInfo {
+    padding: 1.5rem;
+  }
+  
+  .propertyInfo h3 {
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .price {
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .location {
+    color: var(--text-color);
+    opacity: 0.8;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .propertyFeatures {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    font-size: 0.9rem;
+  }
+  
+  .propertyTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .tag {
+    background-color: #f0f0f0;
+    color: var(--text-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+  
+  /* ClientSidebar styles */
+  .clientSidebar {
+    width: 280px;
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 2rem 1.5rem;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    z-index: 10;
+  }
+  
+  .profileSection {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .profileImage {
+    width: 80px;
+    height: 80px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 auto 1rem;
+  }
+  
+  .sidebarNav {
+    margin-bottom: 2rem;
+  }
+  
+  .sidebarNav h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--accent-color);
+    padding-left: 0.5rem;
+  }
+  
+  .sidebarNav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebarNav li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .navButton {
+    background: none;
+    border: none;
+    color: white;
+    text-align: left;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .navButton.active {
+    background-color: var(--primary-color);
+    font-weight: bold;
+  }
+  
+  .contactSection {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .contactSection h3 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+  
+  .contactSection p {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .contactButton {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .contactButton:hover {
+    background-color: var(--accent-color);
+  }
+  
+  /* Responsive sidebar */
+  @media (max-width: 992px) {
+    .clientSidebar {
+      transform: translateX(-100%);
+      width: 280px;
+    }
+    
+    .clientSidebar.open {
+      transform: translateX(0);
+    }
+  }
