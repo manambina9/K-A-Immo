@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // Import de usePathname
+import { usePathname } from "next/navigation";
 import styles from "../public/css/nav.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,28 +11,37 @@ import {
     faLandmark,
     faEnvelope,
     faSignInAlt,
+    faUser,
+    faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-    faFacebook,
-    faTwitter,
-    faInstagram,
-    faLinkedin,
-} from "@fortawesome/free-brands-svg-icons";
-
+ 
 export default function Navbar() {
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-    const pathname = usePathname(); // Récupère le chemin actuel
+    const pathname = usePathname();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    // Vérifier l'état de connexion au montage du composant
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        setIsLoggedIn(!!token);
+    }, []);
 
     const toggleMobileNav = () => {
         setIsMobileNavOpen((prevState) => !prevState);
     };
 
-    // Fermer le menu mobile après un clic sur un lien
     const handleLinkClick = () => {
         setIsMobileNavOpen(false);
     };
 
-    // Vérifier si le chemin actuel correspond à un menu principal
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        setIsLoggedIn(false);
+        setIsMobileNavOpen(false);
+        // Rediriger vers la page d'accueil ou de login si nécessaire
+        window.location.href = '/';
+    };
+
     const isActive = (path: string) => {
         return pathname.startsWith(path);
     };
@@ -45,7 +54,6 @@ export default function Navbar() {
                 </Link>
             </div>
 
-            {/* Bouton hamburger */}
             <div
                 className={`${styles.hamburger} ${isMobileNavOpen ? styles.active : ""}`}
                 onClick={toggleMobileNav}
@@ -55,7 +63,6 @@ export default function Navbar() {
                 <div></div>
             </div>
 
-            {/* Menu mobile */}
             <nav
                 className={`${styles.navLinks} ${
                     isMobileNavOpen ? `${styles.mobileNav} ${styles.open}` : ""
@@ -63,63 +70,44 @@ export default function Navbar() {
             >
                 <ul>
                     <li>
-                    <Link
-                        href="/" 
-                        onClick={handleLinkClick}
-                    >
-                        <FontAwesomeIcon icon={faHome} className={styles.icon} /> Accueil
-                    </Link>
-
+                        <Link href="/" onClick={handleLinkClick}>
+                            <FontAwesomeIcon icon={faHome} className={styles.icon} /> Accueil
+                        </Link>
                     </li>
                     <li className={styles.dropdown}>
-                        <span className={isActive("/SiteFront/Vente") ? styles.active : ""}>
+                        <span className={isActive("/Vente") ? styles.active : ""}>
                             <FontAwesomeIcon icon={faBuilding} className={styles.icon} /> Vente
                         </span>
                         <ul className={styles.dropdownMenu}>
                             <li>
-                                <Link
-                                    href="/SiteFront/Vente/Maison"
-                                    onClick={handleLinkClick}
-                                >
+                                <Link href="/Vente/Maison" onClick={handleLinkClick}>
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Maisons
                                 </Link>
                             </li>
                             <li>
-                                <Link
-                                    href="/SiteFront/Vente/Terrain"
-                                    onClick={handleLinkClick}
-                                >
+                                <Link href="/Vente/Terrain" onClick={handleLinkClick}>
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Terrains
                                 </Link>
                             </li>
                             <li>
-                                <Link
-                                    href="/SiteFront/Vente/model"
-                                    onClick={handleLinkClick}
-                                >
+                                <Link href="/Vente/model" onClick={handleLinkClick}>
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Modélisation 3D
                                 </Link>
                             </li>
                         </ul>
                     </li>
                     <li className={styles.dropdown}>
-                        <span className={isActive("/SiteFront/location") ? styles.active : ""}>
+                        <span className={isActive("/location") ? styles.active : ""}>
                             <FontAwesomeIcon icon={faBuilding} className={styles.icon} /> Location
                         </span>
                         <ul className={styles.dropdownMenu}>
                             <li>
-                                <Link
-                                    href="/SiteFront/location/Maison"
-                                    onClick={handleLinkClick}
-                                >
+                                <Link href="/location/Maison" onClick={handleLinkClick}>
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Maisons
                                 </Link>
                             </li>
                             <li>
-                                <Link
-                                    href="/SiteFront/location/Terrain"
-                                    onClick={handleLinkClick}
-                                >
+                                <Link href="/location/Terrain" onClick={handleLinkClick}>
                                     <FontAwesomeIcon icon={faLandmark} className={styles.icon} /> Terrains
                                 </Link>
                             </li>
@@ -127,35 +115,31 @@ export default function Navbar() {
                     </li>
                     <li>
                         <Link
-                            href="/SiteFront/contact"
-                            className={isActive("/SiteFront/contact") ? styles.active : ""}
+                            href="/contact"
+                            className={isActive("/contact") ? styles.active : ""}
                             onClick={handleLinkClick}
                         >
                             <FontAwesomeIcon icon={faEnvelope} className={styles.icon} /> Contact
                         </Link>
                     </li>
                 </ul>
-                <Link href="/SiteFront/login" onClick={handleLinkClick}>
-                    <button className={styles.loginButton}>
-                        <FontAwesomeIcon icon={faSignInAlt} className={styles.icon} /> Se connecter
-                    </button>
-                </Link>
 
-                {/* Réseaux sociaux */}
-                <div className={styles.socialLinks}>
-                    <Link href="https://www.facebook.com" target="_blank" aria-label="Facebook">
-                        <FontAwesomeIcon icon={faFacebook} className={styles.socialIcon} />
+                {isLoggedIn ? (
+                    <div className={styles.loginButton}>
+                        <Link href="/client/${user.id}" onClick={handleLinkClick}>
+                            <button className={styles.profileButton}>
+                                <FontAwesomeIcon icon={faUser} className={styles.icon} /> Mon compte
+                            </button>
+                        </Link>
+                    </div>
+                ) : (
+                    <Link href="/login" onClick={handleLinkClick}>
+                        <button className={styles.loginButton}>
+                            <FontAwesomeIcon icon={faSignInAlt} className={styles.icon} /> Se connecter
+                        </button>
                     </Link>
-                    <Link href="https://www.twitter.com" target="_blank" aria-label="Twitter">
-                        <FontAwesomeIcon icon={faTwitter} className={styles.socialIcon} />
-                    </Link>
-                    <Link href="https://www.instagram.com" target="_blank" aria-label="Instagram">
-                        <FontAwesomeIcon icon={faInstagram} className={styles.socialIcon} />
-                    </Link>
-                    <Link href="https://www.linkedin.com" target="_blank" aria-label="LinkedIn">
-                        <FontAwesomeIcon icon={faLinkedin} className={styles.socialIcon} />
-                    </Link>
-                </div>
+                )}
+
             </nav>
         </div>
     );

@@ -1,45 +1,53 @@
 <?php
 
-namespace App\Controller\api;
+namespace App\Controller\Api;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class LoginController extends AbstractController
-{ 
+{
     #[Route("/api/login", name: "api_login", methods: ['POST'])]
-    public function ApiLogin(Request $request): JsonResponse
+    public function apiLogin(
+        Request $request,
+        UserRepository $userRepository,
+        UserPasswordHasherInterface $passwordHasher,
+        JWTTokenManagerInterface $JWTManager
+    ): JsonResponse
     {
-        $content = $request->getContent();
-        error_log("Données reçues : " . $content);
-        
-        $data = json_decode($content, true);
-        if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
+        $data = json_decode($request->getContent(), true);
+
+        if ($data === null || !isset($data['email'], $data['password'])) {
             return new JsonResponse([
-                'success' => false,
-                'message' => 'Format JSON invalide',
-                'raw_data' => $content
+                'status' => 'error',
+                'message' => 'Email ou mot de passe manquant ou format JSON invalide',
             ], 400);
         }
-        
 
-        // Vérifier l'authentification de l'utilisateur
-        $user = $this->getUser();
-        if (!$user) {
+        $user = $userRepository->findOneBy(['email' => $data['email']]);
+
+        if (!$user || !$passwordHasher->isPasswordValid($user, $data['password'])) {
             return new JsonResponse([
-                'success' => false,
-                'message' => 'User not authenticated'
+                'status' => 'error',
+                'message' => 'Identifiants incorrects',
             ], 401);
         }
 
-        // Retourner les informations de l'utilisateur
+        $token = $JWTManager->create($user);
+
         return new JsonResponse([
-            'success' => true,
+            'token' => $token,
             'user' => [
-                //'email' => method_exists($user, 'getEmail') ? $user->getEmail() : 'Email not available',
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'username' => $user->getUsername(),
+                'roles' => $user->getRoles(), // si utile pour ton frontend
             ]
         ]);
     }

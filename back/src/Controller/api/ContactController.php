@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\api;
+namespace App\Controller\Api;
 
 use App\Entity\Contact;
 use Doctrine\ORM\EntityManagerInterface;

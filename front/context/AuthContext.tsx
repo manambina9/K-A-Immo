@@ -7,6 +7,7 @@ interface User {
   id: string;
   username: string;
   email: string;
+  roles: string[]; // Ajout des rôles
 }
 
 interface AuthContextType {
@@ -14,6 +15,7 @@ interface AuthContextType {
   user: User | null;
   login: (token: string, userData: User) => void;
   logout: () => void;
+  hasRole: (role: string) => boolean; // Nouvelle méthode pour vérifier les rôles
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -44,12 +46,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     router.push('/login');
   };
 
+  // Vérifie si l'utilisateur a un rôle spécifique
+  const hasRole = (role: string) => {
+    if (!user) return false;
+    return user.roles.includes(role);
+  };
+
   return (
     <AuthContext.Provider value={{
       isAuthenticated: !!user,
       user,
       login,
-      logout
+      logout,
+      hasRole, // Ajout de la méthode
     }}>
       {children}
     </AuthContext.Provider>

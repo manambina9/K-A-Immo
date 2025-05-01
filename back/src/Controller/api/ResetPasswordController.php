@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\api;
+namespace App\Controller\Api;
 
 use App\Entity\User;
 use Symfony\Component\Mime\Address;
@@ -50,7 +50,7 @@ class ResetPasswordController extends AbstractController
     {
         if ($request->isMethod('GET')) {
             // Redirige directement l'utilisateur vers la page de réinitialisation du mot de passe
-            return $this->redirect('http://localhost:3000/SiteFront/reset/newpass?token=' . $token);
+            return $this->redirect('http://localhost:3000/reset/newpass?token=' . $token);
         }
     
         try {
@@ -68,7 +68,7 @@ class ResetPasswordController extends AbstractController
     
         if (!isset($data['password']) || empty($data['password'])) {
             // Redirection vers la page frontend si le mot de passe est manquant
-            return $this->redirect('http://localhost:3000/SiteFront/reset/newpass?token=' . $token);
+            return $this->redirect('http://localhost:3000/reset/newpass?token=' . $token);
         }
     
         $plainPassword = $data['password'];
@@ -104,7 +104,7 @@ class ResetPasswordController extends AbstractController
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,
-                'frontendUrl' => 'http://localhost:3000/SiteFront/reset/newpass?token=' . $resetToken->getToken(),
+                'frontendUrl' => 'http://localhost:3000/reset/newpass?token=' . $resetToken->getToken(),
             ]);
 
         // Envoi de l'email

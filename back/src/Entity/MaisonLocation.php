@@ -63,9 +63,8 @@ class MaisonLocation
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
-    // Pour plusieurs images : relation à une entité Image
-    #[ORM\OneToMany(mappedBy: "maison", targetEntity: Image::class, cascade: ["persist", "remove"])]
-    private Collection $images;
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $images = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $latitude = null;
@@ -79,7 +78,7 @@ class MaisonLocation
 
     public function __construct()
     {
-        $this->images = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -241,23 +240,12 @@ class MaisonLocation
         return $this;
     }
 
-    /**
-     * Get the value of images
-     *
-     * @return Collection
-     */
-    public function getImages(): Collection {
+    public function getImages(): ?array
+    {
         return $this->images;
     }
-
-    /**
-     * Set the value of images
-     *
-     * @param Collection $images
-     *
-     * @return self
-     */
-    public function setImages(Collection $images): self {
+    public function setImages(?array $images): self
+    {
         $this->images = $images;
         return $this;
     }

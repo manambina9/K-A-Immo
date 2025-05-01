@@ -1,0 +1,315 @@
+/* Couleurs - Mêmes que pour house.module.css */
+:root {
+    --primary-color: #D35400; /* Orange */
+    --secondary-color: #2C3E50; /* Bleu foncé */
+    --accent-color: #e67e22; /* Orange plus clair */
+    --text-color: #2C3E50; /* Bleu foncé pour le texte */
+    --light-bg: #ffffff; /* Blanc */
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+    --light-gray: #f5f5f5;
+    --mid-gray: #e0e0e0;
+    --light-orange: #f8d9c9;
+  }
+  
+  /* Client Sidebar Container */
+  .clientSidebar {
+    width: 100%;
+    background-color: var(--light-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    height: 100%;
+    max-width: 300px;
+    position: relative;
+    z-index: 50;
+  }
+  
+  /* Profile Section */
+  .profileSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--mid-gray);
+  }
+  
+  .profileImage {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 10px rgba(211, 84, 0, 0.3);
+  }
+  
+  .profileSection h2 {
+    margin: 0 0 0.5rem 0;
+    color: var(--secondary-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  .profileSection p {
+    margin: 0 0 0.25rem 0;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  /* Sidebar Navigation */
+  .sidebarNav {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--mid-gray);
+  }
+  
+  .sidebarNav h3 {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    margin: 0 0 1rem 0;
+    font-weight: 600;
+  }
+  
+  .sidebarNav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .navButton {
+    width: 100%;
+    text-align: left;
+    padding: 0.8rem 1rem;
+    background-color: var(--light-gray);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-weight: 500;
+  }
+  
+  .navButton:hover {
+    background-color: var(--light-orange);
+  }
+  
+  .navButton.active {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  /* Contact Section */
+  .contactSection {
+    padding-top: 0.5rem;
+  }
+  
+  .contactSection h3 {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    margin: 0 0 1rem 0;
+    font-weight: 600;
+  }
+  
+  .contactSection p {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--text-color);
+  }
+  
+  .contactButton {
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    width: 100%;
+  }
+  
+  .contactButton:hover {
+    background-color: #34495e;
+  }
+  
+  /* Bouton du tiroir mobile */
+  .drawerToggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: var(--box-shadow);
+    border: none;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    z-index: 60;
+    transition: var(--transition);
+  }
+  
+  .drawerToggle:hover {
+    background-color: var(--accent-color);
+  }
+  
+  /* Overlay pour fermer le tiroir en cliquant à l'extérieur */
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: a0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Classe pour montrer l'overlay quand la sidebar est ouverte */
+  .overlayVisible {
+    display: block;
+    opacity: 1;
+  }
+  
+  /* Responsivité */
+  @media (max-width: 1024px) {
+    .clientSidebar {
+      max-width: 250px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .clientSidebar {
+      max-width: 100%;
+      flex-direction: column;
+    }
+    
+    .profileSection {
+      flex-direction: row;
+      text-align: left;
+      padding: 1rem 0;
+      gap: 1rem;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    
+    .profileImage {
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+      margin-bottom: 0;
+    }
+    
+    .profileInfo {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  
+  /* Mode mobile avec tiroir */
+  @media (max-width: 768px) {
+    .clientSidebar {
+      position: fixed;
+      top: 80;
+      left: 0;
+      bottom: 0;
+      width: 280px;
+      max-width: 80%;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      border-radius: 0;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+      overflow-y: auto;
+      z-index: 50;
+    }
+    
+    /* Classe pour afficher la sidebar */
+    .sidebarVisible {
+      transform: translateX(0);
+    }
+    
+    .drawerToggle {
+      display: flex;
+    }
+  }
+  
+  /* Mode tablette et mobile - affichage horizontal */
+  @media (max-width: 640px) {
+    .clientSidebar {
+      padding: 1rem;
+    }
+    
+    .sidebarNav ul {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .navButton {
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      justify-content: flex-start;
+      flex: 1;
+    }
+    
+    .contactSection {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+  
+  /* Pour les très petits écrans */
+  @media (max-width: 480px) {
+    .profileSection h2 {
+      font-size: 1.1rem;
+    }
+    
+    .profileSection p {
+      font-size: 0.8rem;
+    }
+    
+    .drawerToggle {
+      top: 100px;
+      left: 10px;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+  }
+  
+  /* Animation d'entrée pour l'ouverture du tiroir */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .overlay.overlayVisible {
+    animation: fadeIn 0.3s ease forwards;
+  }

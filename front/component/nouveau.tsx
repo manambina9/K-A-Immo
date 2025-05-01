@@ -101,7 +101,7 @@ const Nouveaute = () => {
             </div>
           </div>
         </div>
-        <Link href="/SiteFront/Vente/Maison" className={Styles.voirPlus}>
+        <Link href="/Vente/Maison" className={Styles.voirPlus}>
           Voir plus
         </Link>
       </div>

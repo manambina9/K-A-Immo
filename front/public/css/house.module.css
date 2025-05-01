@@ -1,550 +1,456 @@
-  
-  /* Base Styles */
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--text-color);
-    background-color: white;
-  }
-  
-  .title {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: var(--secondary-color);
-    font-size: 2.5rem;
-    position: relative;
-    padding-bottom: 1rem;
-  }
-  
-  .title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 3px;
-    background-color: var(--primary-color);
-  }
-  
-  /* Grid Layout */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  
-  /* Card Styles */
-  .card {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #eee;
-  }
-  
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-  }
-  
-  .cardHeader {
-    padding: 1.5rem;
-    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .cardTitle {
-    margin: 0;
-    font-size: 1.5rem;
-    color: white;
-  }
-  
-  .available {
-    background-color: #27ae60;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: white;
-  }
-  
-  .unavailable {
-    background-color: #e74c3c;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: white;
-  }
-  
-  .cardDescription {
-    padding: 1.5rem;
-    margin: 0;
-    flex-grow: 1;
-    border-bottom: 1px solid #eee;
-    color: var(--text-color);
-  }
-  
-  .details {
-    padding: 1.5rem;
-  }
-  
-  .detailItem {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.8rem;
-  }
-  
-  .detailLabel {
-    font-weight: bold;
-    color: var(--secondary-color);
-  }
-  
-  .price {
-    color: var(--primary-color);
-    font-weight: bold;
-    font-size: 1.1rem;
-  }
-  
-  .cardFooter {
-    padding: 1rem 1.5rem;
-    display: flex;
-    gap: 1rem;
-    border-top: 1px solid #eee;
-  }
-  
-  /* Button Styles */
-  .button {
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: var(--transition);
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-  }
-  
-  .primary {
-    background-color: var(--primary-color);
-    color: white;
-  }
-  
-  .primary:hover {
-    background-color: #e67e22;
-  }
-  
-  .secondary {
-    background-color: white;
-    color: var(--secondary-color);
-    border: 1px solid var(--secondary-color);
-  }
-  
-  .secondary:hover {
-    background-color: var(--secondary-color);
-    color: white;
-  }
-  
-  .createButton {
-    background-color: var(--secondary-color);
-    color: white;
-  }
-  
-  .createButton:hover {
-    background-color: #1a252f;
-  }
-  
-  .homeButton {
-    background-color: var(--primary-color);
-    color: white;
-  }
-  
-  .homeButton:hover {
-    background-color: #ba4a00;
-  }
-  
-  .actions {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 3rem;
-    flex-wrap: wrap;
-  }
-  
-  /* Loader Styles */
-  .loaderContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 200px;
-  }
-  
-  .loader {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid var(--primary-color);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  /* Pagination Styles */
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 2rem 0;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-  
-  .pageButton {
-    padding: 0.5rem 1rem;
-    border: 1px solid #ddd;
-    background-color: white;
-    color: var(--secondary-color);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: var(--transition);
-    font-weight: bold;
-  }
-  
-  .pageButton:hover:not(.disabled, .active) {
-    background-color: #f0f0f0;
-  }
-  
-  .pageButton.active {
-    background-color: var(--secondary-color);
-    color: white;
-    border-color: var(--secondary-color);
-  }
-  
-  .pageButton.disabled {
-    color: #ccc;
-    cursor: not-allowed;
-    border-color: #eee;
-  }
-  
-  .ellipsis {
-    padding: 0 0.5rem;
-    color: var(--secondary-color);
-  }
-  
-  /* Animations */
-  .fadeIn {
-    animation: fadeIn 0.5s ease-in;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .actions {
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .title {
-      font-size: 2rem;
-    }
-  }
+/* Couleurs */
+:root {
+  --primary-color: #D35400; /* Orange */
+  --secondary-color: #2C3E50; /* Bleu foncé */
+  --accent-color: #e67e22; /* Orange plus clair */
+  --text-color: #2C3E50; /* Bleu foncé pour le texte */
+  --light-bg: #ffffff; /* Blanc */
+  --border-radius: 8px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+  --light-gray: #f5f5f5;
+  --mid-gray: #e0e0e0;
+  --light-orange: #f8d9c9;
+  --error-color: #e74c3c;
+}
 
-  /* Modal Styles */
+/* Container principal */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  color: var(--text-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Titre principal */
+.title {
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: var(--accent-color);
+  border-radius: 2px;
+}
+
+/* Grille de cartes */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Animation d'entrée pour les cartes */
+.fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Carte de propriété */
+.card {
+  background: var(--light-bg);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* En-tête de carte */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--mid-gray);
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
+/* Statut disponibilité */
+.available, .unavailable {
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.available {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.unavailable {
+  background-color: var(--error-color);
+  color: white;
+}
+
+/* Container d'image de carte */
+.cardImageContainer {
+  position: relative;
+  width: 100%;
+  height: 200px; /* Hauteur fixe pour toutes les images */
+  overflow: hidden;
+}
+
+/* Image de carte */
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: var(--transition);
+}
+
+.card:hover .cardImage {
+  transform: scale(1.05);
+}
+
+/* Indicateur de nombre d'images */
+.imageCount {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Description de carte */
+.cardDescription {
+  padding: 1rem;
+  flex-grow: 1;
+  color: var(--text-color);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+/* Détails de propriété */
+.details {
+  padding: 0 1rem;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.detailLabel {
+  font-weight: 600;
+  color: var(--secondary-color);
+}
+
+.price {
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* Pied de carte */
+.cardFooter {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-top: 1px solid var(--mid-gray);
+}
+
+/* Boutons */
+.button {
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  flex: 1;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.primary:hover {
+  background-color: var(--accent-color);
+}
+
+.secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.secondary:hover {
+  background-color: #34495e;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.pageButton {
+  padding: 0.5rem 1rem;
+  background-color: var(--light-bg);
+  border: 1px solid var(--mid-gray);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.9rem;
+}
+
+.pageButton:hover:not(.disabled, .active) {
+  background-color: var(--light-orange);
+}
+
+.pageButton.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.pageButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ellipsis {
+  margin: 0 0.5rem;
+}
+
+/* Chargement et erreurs */
+.loaderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.loader {
+  border: 4px solid var(--mid-gray);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background-color: #fde8e8;
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  text-align: center;
+}
+
+.errorMessage {
+  color: var(--error-color);
+  margin-bottom: 1rem;
+}
+
+.retryButton {
+  padding: 0.7rem 1.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.retryButton:hover {
+  background-color: var(--accent-color);
+}
+
+.noResults {
+  text-align: center;
+  padding: 3rem;
+  background-color: var(--light-gray);
+  border-radius: var(--border-radius);
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+}
+
+/* Modal */
 .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 1rem;
-    animation: fadeIn 0.3s ease-out;
-  }
-  
-  .modalContent {
-    background-color: white;
-    border-radius: 10px;
-    max-width: 900px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: relative;
-    animation: slideUp 0.4s ease-out;
-  }
-  
-  .modalClose {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    color: var(--secondary-color);
-    transition: var(--transition);
-  }
-  
-  .modalClose:hover {
-    color: var(--primary-color);
-    transform: rotate(90deg);
-  }
-  
-  .modalTitle {
-    padding: 1.5rem;
-    margin: 0;
-    color: var(--secondary-color);
-    border-bottom: 1px solid #eee;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.modalContent {
+  background-color: var(--light-bg);
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modalClose {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.8rem;
+  background: transparent;
+  border: none;
+  color: var(--secondary-color);
+  cursor: pointer;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition);
+}
+
+.modalClose:hover {
+  background-color: var(--light-gray);
+}
+
+.modalTitle {
+  padding: 1.5rem;
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--mid-gray);
+}
+
+.modalGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  padding: 1.5rem;
+}
+
+@media (max-width: 768px) {
   .modalGrid {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 2rem;
-    padding: 1.5rem;
+    grid-template-columns: 1fr;
   }
-  
-  .modalMain {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .modalImagePlaceholder {
-    width: 100%;
-    height: 300px;
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .modalImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .noImage {
-    color: #666;
-    font-style: italic;
-  }
-  
-  .modalDescription {
-    line-height: 1.6;
-    color: var(--text-color);
-  }
-  
-  .modalFeatures {
-    background-color: #f9f9f9;
-    padding: 1rem;
-    border-radius: 8px;
-  }
-  
-  .modalFeatures h3 {
-    margin-top: 0;
-    color: var(--secondary-color);
-  }
-  
-  .modalFeatures ul {
-    padding-left: 1.5rem;
-    margin-bottom: 0;
-  }
-  
-  .modalSidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .modalDetails {
-    background-color: #f9f9f9;
-    padding: 1.5rem;
-    border-radius: 8px;
-  }
-  
-  .modalDetails h3 {
-    margin-top: 0;
-    color: var(--secondary-color);
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 0.5rem;
-  }
-  
-  .modalDetails .detailItem {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.8rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .modalDetails .detailItem:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-  }
-  
-  .modalActions {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  /* Animations */
-  @keyframes slideUp {
-    from {
-      transform: translateY(50px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  
-  /* Responsive Modal */
-  @media (max-width: 768px) {
-    .modalGrid {
-      grid-template-columns: 1fr;
-    }
-    
-    .modalImagePlaceholder {
-      height: 200px;
-    }
-    
-    .modalSidebar {
-      order: -1;
-    }
-  }
+}
 
-  /* Ajoutez ces styles à votre fichier house.module.css */
+.modalMain {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
-/* Conteneur d'image avec zoom */
+/* Container d'image modale */
 .modalImageContainer {
   position: relative;
   width: 100%;
-  max-height: 400px;
+  height: 400px;
   overflow: hidden;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  cursor: zoom-in;
-  transition: all 0.3s ease;
+  border-radius: var(--border-radius);
+  cursor: pointer;
 }
 
 .modalImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  object-position: center;
 }
 
-/* Style quand l'image est zoomée */
-.zoomedImageContainer {
-  cursor: zoom-out;
-}
-
-.zoomedImage {
-  transform: scale(1.05);
-}
-
-/* Overlay de zoom complet */
-.zoomedOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: zoom-out;
-}
-
-.zoomedImageWrapper {
-  position: relative;
-  max-width: 90%;
-  max-height: 90%;
-}
-
-.fullZoomedImage {
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto;
-}
-
-.zoomedClose {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1001;
-}
-
-/* Boutons de navigation pour les images */
+/* Navigation d'images */
 .imageNavButton {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
-  border-radius: 50%;
   width: 40px;
   height: 40px;
-  font-size: 18px;
-  cursor: pointer;
+  border-radius: 50%;
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  cursor: pointer;
+  transition: var(--transition);
+  z-index: 5;
 }
 
-.modalImageContainer:hover .imageNavButton {
-  opacity: 1;
+.imageNavButton:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .prevButton {
@@ -555,35 +461,251 @@
   right: 10px;
 }
 
-/* Compteur d'images */
 .imageCounter {
   position: absolute;
   bottom: 10px;
   right: 10px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
-  padding: 5px 10px;
-  border-radius: 12px;
-  font-size: 14px;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
-/* Boutons de navigation pour le mode zoom complet */
+/* Description modale */
+.modalDescription {
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+/* Galerie d'images */
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.galleryItem {
+  position: relative;
+  height: 150px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.galleryImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.galleryItem:hover .galleryImage {
+  transform: scale(1.05);
+}
+
+.galleryImageNumber {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+/* Options d'affichage */
+.viewOptions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.viewButton {
+  padding: 0.5rem 1rem;
+  background-color: var(--light-gray);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.viewButton:hover, .activeViewMode {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+/* Miniatures */
+.thumbnailsContainer {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.thumbnail:hover, .activeThumbnail {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.thumbnailImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Caractéristiques */
+.modalFeatures {
+  background-color: var(--light-gray);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+}
+
+.modalFeatures h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--secondary-color);
+}
+
+.modalFeatures ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.modalFeatures ul li {
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Sidebar modale */
+.modalSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.modalDetails {
+  background-color: var(--light-gray);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+}
+
+.modalDetails h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--secondary-color);
+}
+
+.modalActions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Image zoomée */
+.zoomedImageContainer {
+  cursor: zoom-in;
+}
+
+.zoomedImage {
+  object-fit: contain;
+}
+
+.zoomedOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.zoomedClose {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2rem;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 2010;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--transition);
+}
+
+.zoomedClose:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.zoomedImageWrapper {
+  position: relative;
+  width: 90%;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fullZoomedImage {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}
+
 .zoomedNavButton {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(50, 50, 50, 0.8);
+  background-color: rgba(255, 255, 255, 0.2);
   color: white;
   border: none;
-  border-radius: 50%;
   width: 50px;
   height: 50px;
-  font-size: 24px;
-  cursor: pointer;
+  border-radius: 50%;
+  font-size: 1.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1001;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.zoomedNavButton:hover {
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
 .zoomedPrevButton {
@@ -599,188 +721,196 @@
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
-  padding: 8px 15px;
-  border-radius: 15px;
-  font-size: 16px;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
 }
 
-/* Conteneur de miniatures */
-.thumbnailsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.thumbnail {
-  width: 80px;
-  height: 60px;
-  border-radius: 4px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: border-color 0.3s ease;
-}
-
-.activeThumbnail {
-  border-color: #007bff;
-}
-
-.thumbnailImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Indicateur du nombre d'images sur la carte */
-.imageCount {
+/* Bouton favoris */
+.favoriteButton {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 3px 8px;
-  border-radius: 10px;
-  font-size: 12px;
-}
-
-/* Ajoutez ces styles à votre fichier house.module.css en plus des styles précédents */
-
-/* Mode galerie d'images */
-.galleryGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.galleryItem {
-  position: relative;
-  border-radius: 6px;
-  overflow: hidden;
-  height: 150px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.galleryItem:hover {
-  transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.galleryImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.galleryImageNumber {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  width: 24px;
-  height: 24px;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+.favoriteButton:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+  
+  .container {
+    padding: 1rem;
+  }
+  
+  .modalImageContainer {
+    height: 300px;
+  }
+  
+  .modalActions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 576px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .galleryGrid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+
+/* Fix pour que les images aient des proportions cohérentes */
+.noImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: var(--light-gray);
+  color: var(--secondary-color);
+  font-weight: 600;
 }
 
 .imageError {
-  background-color: #f3f3f3;
+  background-color: var(--light-gray);
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  color: #666;
-  font-size: 12px;
+  color: var(--error-color);
+  font-size: 0.8rem;
 }
 
-.imageError::before {
+.imageError::after {
   content: "Image non disponible";
 }
 
-/* Boutons de sélection du mode d'affichage */
-.viewOptions {
+/* Carrousel styles */
+.carouselContainer {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.carouselImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease;
+}
+
+.carouselButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10;
   display: flex;
-  gap: 10px;
-  margin: 15px 0;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.carouselButton:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.prevButton {
+  left: 15px;
+}
+
+.nextButton {
+  right: 15px;
+}
+
+.carouselIndicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.3s ease;
+}
+
+.activeIndicator {
+  background-color: white;
+}
+
+.autoPlayButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
 
-.viewButton {
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 8px 12px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.viewButton:hover {
-  background-color: #e0e0e0;
-}
-
-.activeViewMode {
-  background-color: #007bff;
-  color: white;
-  border-color: #0066cc;
-}
-
-.activeViewMode:hover {
-  background-color: #0056b3;
-}
-
-/* Responsivité pour le mode galerie */
-@media (max-width: 768px) {
-  .galleryGrid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
-  
-  .galleryItem {
-    height: 120px;
-  }
-  
-  .viewButton {
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-}
-
-/* Amélioration des thumbnails */
-.thumbnailsContainer {
+.noImage {
   display: flex;
-  overflow-x: auto;
-  gap: 8px;
-  padding: 8px 0;
-  max-width: 100%;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-
-.thumbnail {
-  flex: 0 0 auto;
-  width: 70px;
-  height: 50px;
-  border-radius: 4px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.thumbnail:hover {
-  transform: translateY(-2px);
-}
-
-.activeThumbnail {
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #f0f0f0;
+  color: #666;
+  font-size: 18px;
 }

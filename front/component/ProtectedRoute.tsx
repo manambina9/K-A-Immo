@@ -1,23 +1,29 @@
 'use client'
-import { ReactNode } from 'react'; 
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation'; 
 
-interface ProtectedRouteProps {
-  children: ReactNode; // Type explicite pour les enfants
-}
-
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+export const ProtectedRoute = ({
+  children,
+  requiredRole,
+}: {
+  children: React.ReactNode;
+  requiredRole?: string;
+}) => {
+  const { isAuthenticated, hasRole, user } = useAuth();
   const router = useRouter();
-  
+
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
-      router.push('/../SiteFront/login')
+    if (!isAuthenticated) {
+      router.push('/login');
+    } else if (requiredRole && !hasRole(requiredRole)) {
+      router.push('/unauthorized');
     }
-  }, [router]);
+  }, [isAuthenticated, requiredRole, router, hasRole]);
+
+  if (!isAuthenticated || (requiredRole && !hasRole(requiredRole))) {
+    return null;
+  }
 
   return <>{children}</>;
 };
-
-export default ProtectedRoute;

@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\api;
+namespace App\Controller\Api;
 
 use App\Entity\MaisonLocation;
 use App\Repository\MaisonLocationRepository;
@@ -21,11 +21,11 @@ class MaisonLocationController extends AbstractController
     {
         try {
             $maisons = $repo->findAll();
-    
+
             if (empty($maisons)) {
                 return $this->json(['message' => 'Aucune maison trouvée'], Response::HTTP_OK);
             }
-    
+
             $data = array_map(function (MaisonLocation $maison) {
                 return [
                     'id' => $maison->getId(),
@@ -42,101 +42,82 @@ class MaisonLocationController extends AbstractController
                     'latitude' => $maison->getLatitude(),
                     'longitude' => $maison->getLongitude(),
                     'image' => $maison->getImage(),
+                    'images' => $maison->getImages() ?? [], // Ajoutez ceci
                     'codePostal' => $maison->getCodePostal()
                 ];
             }, $maisons);
-    
+
             return $this->json($data);
-    
+
         } catch (\Exception $e) {
-            // Log l'erreur
             error_log($e->getMessage());
-            
             return $this->json([
                 'error' => 'Erreur serveur',
                 'message' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
     #[Route('/new', name: 'api_maison_location_new', methods: ['POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): JsonResponse
+    public function new(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        $data = $request->request->all();
-        $uploadedFiles = $request->files->all()['images'] ?? [];
+        try {
+            // Lire le JSON envoyé
+            $data = json_decode($request->getContent(), true);
 
-        // Validation des champs requis
-        $requiredFields = ['nom', 'adresse', 'ville', 'prix', 'codePostal', 'surface', 'nbChambres', 'type'];
-        foreach ($requiredFields as $field) {
-            if (empty($data[$field])) {
-                return new JsonResponse(['error' => "Le champ $field est requis."], Response::HTTP_BAD_REQUEST);
+            if ($data === null) {
+                return $this->json([
+                    'status' => 'error',
+                    'message' => 'JSON invalide'
+                ], Response::HTTP_BAD_REQUEST);
             }
-        }
 
-        // Validation des images
-        if (count($uploadedFiles) === 0) {
-            return new JsonResponse(['error' => 'Au moins une image est requise.'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $maisonLocation = new MaisonLocation();
-        $maisonLocation->setNom($data['nom']);
-        $maisonLocation->setAdresse($data['adresse']);
-        $maisonLocation->setVille($data['ville']);
-        $maisonLocation->setPrix((int) $data['prix']);
-        $maisonLocation->setCodePostal($data['codePostal']);
-        $maisonLocation->setDescription($data['description'] ?? '');
-        $maisonLocation->setSurface((float) $data['surface']);
-        $maisonLocation->setNbChambres((int) $data['nbChambres']);
-        $maisonLocation->setLatitude((float) ($data['latitude'] ?? 0));
-        $maisonLocation->setLongitude((float) ($data['longitude'] ?? 0));
-        $maisonLocation->setType($data['type']);
-        $maisonLocation->setDisponible(true);
-        $maisonLocation->setDateDisponibilite(new \DateTime());
-
-        // Traitement des images (on prend la première comme image principale)
-        $imagePaths = [];
-        $destination = $this->getParameter('kernel.project_dir').'/public/Vente/Maison';
-        
-        foreach ($uploadedFiles as $uploadedFile) {
-            if ($uploadedFile instanceof UploadedFile) {
-                $newFilename = uniqid().'.'.$uploadedFile->guessExtension();
-                
-                try {
-                    $uploadedFile->move($destination, $newFilename);
-                    $imagePaths[] = '/Vente/Maison/'.$newFilename;
-                } catch (FileException $e) {
-                    // On continue avec les autres images si une échoue
-                    continue;
+            // Vérifier les champs obligatoires
+            $requiredFields = ['nom', 'adresse', 'ville', 'prix', 'codePostal', 'surface', 'nbChambres', 'type', 'images'];
+            foreach ($requiredFields as $field) {
+                if (!isset($data[$field]) || $data[$field] === '') {
+                    return $this->json([
+                        'status' => 'error',
+                        'message' => "Le champ $field est requis"
+                    ], Response::HTTP_BAD_REQUEST);
                 }
             }
+
+            // Créer la maison
+            $maison = new MaisonLocation();
+            $maison
+                ->setNom($data['nom'])
+                ->setAdresse($data['adresse'])
+                ->setVille($data['ville'])
+                ->setPrix((float) $data['prix'])
+                ->setCodePostal($data['codePostal'])
+                ->setDescription($data['description'] ?? '')
+                ->setSurface((float) $data['surface'])
+                ->setNbChambres((int) $data['nbChambres'])
+                ->setDisponible($data['disponible'] ?? true)
+                ->setDateDisponibilite(isset($data['dateDisponibilite']) ? new \DateTime($data['dateDisponibilite']) : null)
+                ->setType($data['type'])
+                ->setImage($data['images'][0] ?? null) // Première image
+                ->setImages($data['images']);
+
+            $em->persist($maison);
+            $em->flush();
+
+            return $this->json([
+                'status' => 'success',
+                'id' => $maison->getId(),
+                'images' => $data['images']
+            ]);
+
+        } catch (\Exception $e) {
+            error_log('Erreur création maison: ' . $e->getMessage());
+
+            return new JsonResponse([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        
         }
-
-        if (empty($imagePaths)) {
-            return new JsonResponse(['error' => 'Erreur lors du téléchargement des images.'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        // On prend la première image comme image principale
-        $maisonLocation->setImage($imagePaths[0]);
-
-        // 🔐 Lier au propriétaire
-        if (!empty($data['proprietaire_id'])) {
-            $proprietaire = $userRepository->find($data['proprietaire_id']);
-            if (!$proprietaire) {
-                return new JsonResponse(['error' => 'Utilisateur propriétaire introuvable.'], Response::HTTP_BAD_REQUEST);
-            }
-            $maisonLocation->setProprietaire($proprietaire);
-        }
-
-        $entityManager->persist($maisonLocation);
-        $entityManager->flush();
-
-        return new JsonResponse([
-            'message' => 'Maison créée avec succès',
-            'id' => $maisonLocation->getId(),
-            'images' => $imagePaths
-        ], Response::HTTP_CREATED);
     }
-
 
     #[Route('/{id}', name: 'api_maison_location_show', methods: ['GET'])]
     public function show(MaisonLocation $maisonLocation): JsonResponse
@@ -157,8 +138,33 @@ class MaisonLocationController extends AbstractController
             'latitude' => $maisonLocation->getLatitude(),
             'longitude' => $maisonLocation->getLongitude(),
             'image' => $maisonLocation->getImage(),
+            'images' => $maisonLocation->getImages() ?? [], 
             'proprietaire' => $maisonLocation->getProprietaire()?->getId(),
-
         ]);
     }
+
+    #[Route('/upload', name: 'api_upload', methods: ['POST'])]
+public function upload(Request $request): JsonResponse
+{
+    /** @var UploadedFile $file */
+    $file = $request->files->get('file');
+
+    if (!$file) {
+        return $this->json(['error' => 'Aucun fichier reçu'], Response::HTTP_BAD_REQUEST);
+    }
+
+    // Définir le répertoire d'upload
+    $uploadsDir = $this->getParameter('kernel.project_dir') . '/public/uploads';
+    $filename = uniqid() . '.' . $file->guessExtension();
+
+    try {
+        // Déplacer le fichier dans le répertoire d'upload
+        $file->move($uploadsDir, $filename);
+    } catch (FileException $e) {
+        return $this->json(['error' => 'Erreur lors de l\'upload'], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    // Retourner l'URL du fichier
+    return $this->json(['url' => '/uploads/' . $filename]);
+}
 }

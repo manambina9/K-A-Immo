@@ -1,0 +1,54 @@
+Array
+(
+    [nom] => vamos
+    [adresse] => Adresse
+    [ville] => Ville
+    [prix] => 1200
+    [codePostal] => 102
+    [description] => vamos
+    [surface] => 75
+    [nbChambres] => 2
+    [type] => Studio
+    [latitude] => 12
+    [longitude] => 15
+)
+Array
+(
+    [images] => Array
+        (
+            [0] => Symfony\Component\HttpFoundation\File\UploadedFile Object
+                (
+                    [originalName:Symfony\Component\HttpFoundation\File\UploadedFile:private] => OIP (2).jfif
+                    [mimeType:Symfony\Component\HttpFoundation\File\UploadedFile:private] => image/jpeg
+                    [error:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 0
+                    [originalPath:Symfony\Component\HttpFoundation\File\UploadedFile:private] => OIP (2).jfif
+                    [test:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 
+                    [pathName:SplFileInfo:private] => C:\wamp64\tmp\php66C7.tmp
+                    [fileName:SplFileInfo:private] => php66C7.tmp
+                )
+
+            [1] => Symfony\Component\HttpFoundation\File\UploadedFile Object
+                (
+                    [originalName:Symfony\Component\HttpFoundation\File\UploadedFile:private] => R (1).jfif
+                    [mimeType:Symfony\Component\HttpFoundation\File\UploadedFile:private] => image/jpeg
+                    [error:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 0
+                    [originalPath:Symfony\Component\HttpFoundation\File\UploadedFile:private] => R (1).jfif
+                    [test:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 
+                    [pathName:SplFileInfo:private] => C:\wamp64\tmp\php66C8.tmp
+                    [fileName:SplFileInfo:private] => php66C8.tmp
+                )
+
+            [2] => Symfony\Component\HttpFoundation\File\UploadedFile Object
+                (
+                    [originalName:Symfony\Component\HttpFoundation\File\UploadedFile:private] => R.jfif
+                    [mimeType:Symfony\Component\HttpFoundation\File\UploadedFile:private] => image/jpeg
+                    [error:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 0
+                    [originalPath:Symfony\Component\HttpFoundation\File\UploadedFile:private] => R.jfif
+                    [test:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 
+                    [pathName:SplFileInfo:private] => C:\wamp64\tmp\php66C9.tmp
+                    [fileName:SplFileInfo:private] => php66C9.tmp
+                )
+
+        )
+
+)

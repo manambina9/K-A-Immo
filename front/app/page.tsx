@@ -4,6 +4,7 @@ import Nouveautes from "@/component/nouveau"
 import Footer from"../component/footer"
 import Loue from "../component/loue"
 import Contact from "@/component/contact";
+import Actualite from '../component/actualite'
 
 export default function Home() {
   return (
@@ -34,7 +35,7 @@ export default function Home() {
 
       <Nouveautes />
       <Loue />
-    <Contact />
+      <Actualite />
     <Footer />
     </>
   );

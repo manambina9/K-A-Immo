@@ -8,7 +8,7 @@ interface FileWithPreview extends File {
 }
 
 export default function AddMaison() {
-  const router = useRouter(); // Initialiser le router
+  const router = useRouter(); 
   const [nom, setNom] = useState('');
   const [adresse, setAdresse] = useState('');
   const [ville, setVille] = useState('');
@@ -89,45 +89,68 @@ export default function AddMaison() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const formData = new FormData();
-    
-    // Ajouter les champs texte
-    formData.append('nom', nom);
-    formData.append('adresse', adresse);
-    formData.append('ville', ville);
-    formData.append('prix', prix);
-    formData.append('codePostal', codePostal);
-    formData.append('description', description);
-    formData.append('surface', surface);
-    formData.append('nbChambres', nbChambres);
-    formData.append('latitude', latitude);
-    formData.append('longitude', longitude);
-    formData.append('type', type);
-
-    // Ajouter les images
-    images.forEach((image) => {
-      formData.append('images[]', image);
-    });
-
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/maisons/new', {
-        method: 'POST',
-        body: formData,
-      });
+        // Étape 1 : Uploader les images et récupérer leurs URLs
+        const uploadedImages = await Promise.all(
+            images.map(async (image) => {
+                const formData = new FormData();
+                formData.append('file', image);
 
-      if (!response.ok) {
-        throw new Error('Erreur lors de la création de la maison: ' + response.statusText);
-      }
+                const response = await fetch('http://127.0.0.1:8000/api/maisons/upload', { 
+                    method: 'POST',
+                    body: formData,
+                });
 
-      const result = await response.json();
-      console.log('Maison créée :', result);
+                if (!response.ok) {
+                    throw new Error('Erreur lors de l\'upload des images');
+                }
 
-      // Redirection après succès
-      router.push('http://127.0.0.1:3000/Admin/apiLocation');
+                const result = await response.json();
+                return result.url; // L'URL retournée par le backend
+            })
+        );
+
+        // Étape 2 : Envoyer les données principales
+        const payload = {
+            nom,
+            adresse,
+            ville,
+            prix: parseFloat(prix),
+            codePostal,
+            description,
+            surface: parseFloat(surface),
+            nbChambres: parseInt(nbChambres, 10),
+            latitude: latitude ? parseFloat(latitude) : null,
+            longitude: longitude ? parseFloat(longitude) : null,
+            disponible: true,
+            type,
+            dateDisponibilite: new Date().toISOString(),
+            images: uploadedImages,
+        };
+
+        console.log('Payload envoyé :', payload);
+
+        const response = await fetch('http://127.0.0.1:8000/api/maisons/new', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Erreur lors de la création de la maison: ${response.statusText} - ${errorText}`);
+        }
+
+        const result = await response.json();
+        console.log('Maison créée :', result);
+
+        router.push('http://127.0.0.1:3000/Admin/apiLocation');
     } catch (error) {
-      console.error('Erreur:', error);
+        console.error('Erreur:', error);
     } finally {
-      setIsSubmitting(false);
+        setIsSubmitting(false);
     }
   };
 

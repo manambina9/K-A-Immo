@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
 import styles from '../../../public/css/user.module.css';
+import { ProtectedRoute } from '../../../component/ProtectedRoute';
 
 export default function ClientDashboard() {
   // État pour les données client et propriétés
@@ -224,6 +225,7 @@ const toggleFavorite = (propertyId: number): void => {
 
   if (loading) {
     return (
+
       <div className={styles.loadingContainer}>
         <div className={styles.loader}></div>
         <p className={styles.loadingText}>Chargement de votre espace personnel...</p>
@@ -232,6 +234,8 @@ const toggleFavorite = (propertyId: number): void => {
   }
 
   return (
+    
+    <ProtectedRoute requiredRole="ROLE_USER">
     <div className={styles.container}>
       <Head>
         <title>Tableau de bord | ImmoExcellence</title>
@@ -587,5 +591,6 @@ const toggleFavorite = (propertyId: number): void => {
         </div>
       </footer>
     </div>
+    </ProtectedRoute>
   );
 }
