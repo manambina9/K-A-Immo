@@ -7,21 +7,7 @@ import ApiLocation from '../../../component/VenteMaison';
 import styles from '../../../public/css/user.module.css';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
-type Client = {
-  id: number;
-  username: string;
-  name: string;
-  email: string;
-  phone?: string;
-  favorites: number[];
-  preferences: {
-    type: string;
-    budget: number;
-    location: string;
-    bedrooms: number;
-  };
-};
+import { Client } from '../../../types/types';
 
 const ClientPage = () => {
   const [client, setClient] = useState<Client | null>(null);
@@ -56,7 +42,7 @@ const ClientPage = () => {
         });
       } catch (error) {
         console.error('Error fetching client data:', error);
-        router.push('../login');
+        router.push('../login'); // Vérifiez que ce chemin est correct
       } finally {
         setLoading(false);
       }
@@ -73,17 +59,40 @@ const ClientPage = () => {
       ? client.favorites.filter(id => id !== propertyId)
       : [...client.favorites, propertyId];
 
-    // Update localStorage
-    const updatedUser = { 
-      ...JSON.parse(localStorage.getItem('user') || '{}'),
-      favorites: updatedFavorites 
-    };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    try {
+      // Update localStorage
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const updatedUser = { 
+          ...JSON.parse(userData),
+          favorites: updatedFavorites 
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
 
-    setClient({
-      ...client,
-      favorites: updatedFavorites
-    });
+      setClient({
+        ...client,
+        favorites: updatedFavorites
+      });
+    } catch (error) {
+      console.error('Error updating favorites:', error);
+    }
+  };
+
+  const handleProfileUpdate = (updatedClient: Client) => {
+    try {
+      // Mettre à jour le client dans localStorage
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const updatedUser = { ...JSON.parse(userData), ...updatedClient };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
+
+      // Mettre à jour l'état local
+      setClient(updatedClient);
+    } catch (error) {
+      console.error('Error updating client profile:', error);
+    }
   };
 
   if (loading) {
@@ -109,7 +118,10 @@ const ClientPage = () => {
         onFilterChange={setActiveFilter}
       />
       <div className={styles.mainContent}>
-        <ClientHeader client={client} />
+        <ClientHeader 
+          client={client} 
+          onProfileUpdate={handleProfileUpdate} // Ajout de la prop manquante
+        />
         <ApiLocation 
           showOnlyFavorites={activeFilter === 'favorites'}
           favorites={client.favorites}

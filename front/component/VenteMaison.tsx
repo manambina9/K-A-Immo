@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import styles from '../public/css/house.module.css';
+import styles from '../public/css/house.module.css'; 
 
 interface Maison {
   id: number;
@@ -18,7 +18,7 @@ interface Maison {
   latitude?: number;
   longitude?: number;
   image?: string;
-  images?: string[];
+  images?: string[]; // Ajout pour stocker plusieurs images
   codePostal?: string;
   caracteristiques?: string[];
   sallesDeBain?: number;
@@ -30,6 +30,7 @@ interface ApiLocationProps {
   favorites?: number[];
   onToggleFavorite?: (propertyId: number) => void;
 }
+
 
 export default function ApiLocation({ 
   showOnlyFavorites = false, 
@@ -44,8 +45,19 @@ export default function ApiLocation({
   const [itemsPerPage] = useState(6);
   const [selectedMaison, setSelectedMaison] = useState<Maison | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isImageZoomed, setIsImageZoomed] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [autoPlay, setAutoPlay] = useState(true);
+  const [isGalleryMode, setIsGalleryMode] = useState(false);
+
+  const toggleImageZoom = () => {
+    setIsImageZoomed((prev) => !prev);
+    setIsGalleryMode(false); // Fermer la galerie si ouverte
+  };
+
+  const toggleGalleryMode = () => {
+    setIsGalleryMode((prev) => !prev);
+    setIsImageZoomed(false); // Fermer le zoom si ouvert
+  };
 
   useEffect(() => {
     const fetchMaisons = async () => {
@@ -75,8 +87,10 @@ export default function ApiLocation({
           throw new Error("La réponse de l'API n'est pas un tableau");
         }
 
+        // Formater les données pour ajouter le tableau d'images si non présent
         const formattedData = data.map(maison => ({
           ...maison,
+          // Si maison.image existe mais pas maison.images, on crée un tableau avec l'image principale
           images: maison.images || (maison.image ? [maison.image] : [])
         }));
 
@@ -99,19 +113,6 @@ export default function ApiLocation({
     setDisplayedMaisons(allMaisons.slice(startIndex, endIndex));
   }, [currentPage, allMaisons, itemsPerPage]);
 
-  // Effet pour le défilement automatique des images
-  useEffect(() => {
-    if (!isModalOpen || !selectedMaison?.images?.length || !autoPlay) return;
-
-    const interval = setInterval(() => {
-      setCurrentImageIndex(prev => 
-        prev === selectedMaison.images!.length - 1 ? 0 : prev + 1
-      );
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [isModalOpen, selectedMaison, currentImageIndex, autoPlay]);
-
   const formatPrix = (prix: number) => {
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(prix);
   };
@@ -128,34 +129,41 @@ export default function ApiLocation({
   const openModal = (maison: Maison) => {
     setSelectedMaison(maison);
     setIsModalOpen(true);
-    setCurrentImageIndex(0);
-    setAutoPlay(true);
+    setCurrentImageIndex(0); // Réinitialiser l'index de l'image
+    setIsImageZoomed(false); // Réinitialiser le zoom
+    setIsGalleryMode(false); // Réinitialiser le mode galerie
     document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedMaison(null);
+    setIsImageZoomed(false);
+    setIsGalleryMode(false);
     document.body.style.overflow = 'auto';
+  };
+
+  const handleImageClick = () => {
+    if (!isGalleryMode) {
+      toggleImageZoom();
+    }
   };
 
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (selectedMaison && selectedMaison.images && selectedMaison.images.length > 0) {
-      setCurrentImageIndex(prev => 
-        prev === selectedMaison.images!.length - 1 ? 0 : prev + 1
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === selectedMaison.images!.length - 1 ? 0 : prevIndex + 1
       );
-      setAutoPlay(false); // Désactive l'autoplay lorsque l'utilisateur navigue manuellement
     }
   };
 
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (selectedMaison && selectedMaison.images && selectedMaison.images.length > 0) {
-      setCurrentImageIndex(prev => 
-        prev === 0 ? selectedMaison.images!.length - 1 : prev - 1
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === 0 ? selectedMaison.images!.length - 1 : prevIndex - 1
       );
-      setAutoPlay(false); // Désactive l'autoplay lorsque l'utilisateur navigue manuellement
     }
   };
 
@@ -201,10 +209,10 @@ export default function ApiLocation({
   };
 
   return (
-    <>
+    <> 
       <div className={styles.container}>
         <h1 className={styles.title}>Nos Maisons en Location</h1>
-  
+
         {error ? (
           <div className={styles.errorContainer}>
             <p className={styles.errorMessage}>Erreur : {error}</p>
@@ -349,67 +357,124 @@ export default function ApiLocation({
 
               <div className={styles.modalGrid}>
                 <div className={styles.modalMain}>
-                  {/* Carrousel d'images */}
-                  <div className={styles.carouselContainer}>
-                    {selectedMaison.images && selectedMaison.images.length > 0 ? (
-                      <>
-                        <img
-                          src={getImageUrl(selectedMaison.images[currentImageIndex])}
-                          alt={`${selectedMaison.nom} - Image ${currentImageIndex + 1}`}
-                          className={styles.carouselImage}
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = 'none';
-                          }}
-                        />
-                        
-                        {/* Boutons de navigation */}
-                        <button 
-                          className={`${styles.carouselButton} ${styles.prevButton}`}
-                          onClick={prevImage}
-                        >
-                          &lt;
-                        </button>
-                        
-                        <button 
-                          className={`${styles.carouselButton} ${styles.nextButton}`}
-                          onClick={nextImage}
-                        >
-                          &gt;
-                        </button>
-                        
-                        {/* Indicateurs de position */}
-                        <div className={styles.carouselIndicators}>
-                          {selectedMaison.images.map((_, index) => (
-                            <button
-                              key={index}
-                              className={`${styles.indicator} ${
-                                index === currentImageIndex ? styles.activeIndicator : ''
-                              }`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setCurrentImageIndex(index);
-                                setAutoPlay(false);
+                  {!isGalleryMode ? (
+                    /* Affichage normal avec une seule image principale */
+                    <div 
+                      className={`${styles.modalImageContainer} ${isImageZoomed ? styles.zoomedImageContainer : ''}`}
+                      onClick={handleImageClick}
+                    >
+                      {selectedMaison.images && selectedMaison.images.length > 0 ? (
+                        <>
+                          <img
+                            src={getImageUrl(selectedMaison.images[currentImageIndex])}
+                            alt={`${selectedMaison.nom} - Image ${currentImageIndex + 1}`}
+                            className={`${styles.modalImage} ${isImageZoomed ? styles.zoomedImage : ''}`}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                            }}
+                          />
+                          {selectedMaison.images.length > 1 && !isImageZoomed && (
+                            <>
+                              <button 
+                                className={`${styles.imageNavButton} ${styles.prevButton}`}
+                                onClick={prevImage}
+                                aria-label="Image précédente"
+                              >
+                                &lt;
+                              </button>
+                              <button 
+                                className={`${styles.imageNavButton} ${styles.nextButton}`}
+                                onClick={nextImage}
+                                aria-label="Image suivante"
+                              >
+                                &gt;
+                              </button>
+                              <div className={styles.imageCounter}>
+                                {currentImageIndex + 1} / {selectedMaison.images.length}
+                              </div>
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <div className={styles.noImage}>Image non disponible</div>
+                      )}
+                    </div>
+                  ) : (
+                    /* Affichage en mode galerie */
+                    <div className={styles.galleryGrid}>
+                      {selectedMaison.images && selectedMaison.images.length > 0 ? (
+                        selectedMaison.images.map((image, index) => (
+                          <div 
+                            key={index} 
+                            className={styles.galleryItem}
+                            onClick={() => {
+                              setCurrentImageIndex(index);
+                              setIsGalleryMode(false);
+                              setIsImageZoomed(true);
+                            }}
+                          >
+                            <img 
+                              src={getImageUrl(image)} 
+                              alt={`${selectedMaison.nom} - Image ${index + 1}`}
+                              className={styles.galleryImage}
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                target.parentElement!.classList.add(styles.imageError);
                               }}
                             />
-                          ))}
-                        </div>
-                        
-                        {/* Bouton play/pause */}
-                        <button
-                          className={styles.autoPlayButton}
+                            <div className={styles.galleryImageNumber}>{index + 1}</div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className={styles.noImage}>Aucune image disponible</div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Boutons pour basculer entre les modes d'affichage et voir toutes les images */}
+                  {selectedMaison.images && selectedMaison.images.length > 1 && (
+                    <div className={styles.viewOptions}>
+                      <button 
+                        className={`${styles.viewButton} ${!isGalleryMode ? styles.activeViewMode : ''}`}
+                        onClick={() => setIsGalleryMode(false)}
+                      >
+                        Mode standard
+                      </button>
+                      <button 
+                        className={`${styles.viewButton} ${isGalleryMode ? styles.activeViewMode : ''}`}
+                        onClick={toggleGalleryMode}
+                      >
+                        Voir toutes les images ({selectedMaison.images.length})
+                      </button>
+                    </div>
+                  )}
+
+                  {!isGalleryMode && selectedMaison.images && selectedMaison.images.length > 1 && (
+                    <div className={styles.thumbnailsContainer}>
+                      {selectedMaison.images.map((image, index) => (
+                        <div 
+                          key={index}
+                          className={`${styles.thumbnail} ${index === currentImageIndex ? styles.activeThumbnail : ''}`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            setAutoPlay(!autoPlay);
+                            setCurrentImageIndex(index);
                           }}
                         >
-                          {autoPlay ? '⏸' : '▶'}
-                        </button>
-                      </>
-                    ) : (
-                      <div className={styles.noImage}>Image non disponible</div>
-                    )}
-                  </div>
+                          <img 
+                            src={getImageUrl(image)}
+                            alt={`Miniature ${index + 1}`}
+                            className={styles.thumbnailImage}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
                   <p className={styles.modalDescription}>
                     {selectedMaison.description || 'Aucune description disponible'}
@@ -492,6 +557,49 @@ export default function ApiLocation({
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {isImageZoomed && selectedMaison && (
+          <div className={styles.zoomedOverlay} onClick={toggleImageZoom}>
+            <button className={styles.zoomedClose} onClick={toggleImageZoom}>
+              &times;
+            </button>
+            <div className={styles.zoomedImageWrapper}>
+              <img
+                src={getImageUrl(selectedMaison.images?.[currentImageIndex] || selectedMaison.image)}
+                alt={selectedMaison.nom}
+                className={styles.fullZoomedImage}
+                onClick={(e) => e.stopPropagation()}
+              />
+              {selectedMaison.images && selectedMaison.images.length > 1 && (
+                <>
+                  <button 
+                    className={`${styles.zoomedNavButton} ${styles.zoomedPrevButton}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      prevImage(e);
+                    }}
+                    aria-label="Image précédente"
+                  >
+                    &lt;
+                  </button>
+                  <button 
+                    className={`${styles.zoomedNavButton} ${styles.zoomedNextButton}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      nextImage(e);
+                    }}
+                    aria-label="Image suivante"
+                  >
+                    &gt;
+                  </button>
+                  <div className={styles.zoomedCounter}>
+                    {currentImageIndex + 1} / {selectedMaison.images.length}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}

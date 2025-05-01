@@ -3,20 +3,7 @@ import { useState, useEffect } from 'react';
 import styles from '../../public/css/user.module.css';
 import { useRouter } from 'next/navigation';
 import EditProfileModal from './EditProfileModal';
-
-interface Client {
-  id: number;
-  username: string;
-  name: string;
-  email: string;
-  phone?: string;
-  preferences: {
-    type: string;
-    budget: number;
-    location: string;
-    bedrooms: number;
-  };
-}
+import { Client } from '../../types/types';
 
 const ClientHeader = ({ client, onProfileUpdate }: { client: Client, onProfileUpdate: (updatedClient: Client) => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -24,15 +11,13 @@ const ClientHeader = ({ client, onProfileUpdate }: { client: Client, onProfileUp
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const router = useRouter();
-
-  // Gestion du scroll
+ 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Fermeture du dropdown au clic externe
+ 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownOpen && !(event.target as HTMLElement).closest(`.${styles.profileDropdown}`)) {
@@ -61,7 +46,7 @@ const ClientHeader = ({ client, onProfileUpdate }: { client: Client, onProfileUp
   const handleSaveProfile = async (updatedData: any) => {
     try {
       const token = localStorage.getItem('token');
-      console.log('Using token:', token?.substring(0, 20) + '...'); // Log partiel du token
+      console.log('Using token:', token?.substring(0, 20) + '...'); 
   
       if (!token) {
         console.error('No token - redirecting to login');
@@ -75,7 +60,7 @@ const ClientHeader = ({ client, onProfileUpdate }: { client: Client, onProfileUp
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        credentials: 'include', // Important pour les cookies
+        credentials: 'include', 
         body: JSON.stringify(updatedData)
       });
   
@@ -94,6 +79,9 @@ const ClientHeader = ({ client, onProfileUpdate }: { client: Client, onProfileUp
   
       const data = await response.json();
       localStorage.setItem('user', JSON.stringify(data.user));
+ 
+      onProfileUpdate(data.user);
+
       return data.user;
   
     } catch (error) {
