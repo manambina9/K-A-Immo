@@ -1,172 +1,265 @@
-/* styles/login.module.css */
-.container {
-    display: flex;
-    min-height: 100vh;
-    background-color: #f8f9fa;
+.loginContainer {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.backgroundImage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(44, 62, 80, 0.9) 0%, rgba(44, 62, 80, 0.7) 50%, rgba(44, 62, 80, 0.4) 100%);
+  z-index: 1;
+}
+
+.contentContainer {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.loginCard {
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 420px;
+  transform: translateY(0);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.loginCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cardHeader {
+  background: linear-gradient(to right, #D35400, #e67e22);
+  padding: 1.5rem;
+  text-align: center;
+  color: white;
+}
+
+.logoContainer {
+  display: inline-block;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  margin-bottom: 0.75rem;
+}
+
+.formContainer {
+  padding: 2rem;
+}
+
+.inputGroup {
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+
+.inputLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2C3E50;
+  margin-bottom: 0.5rem;
+}
+
+.inputField {
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  transition: all 0.2s;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: #D35400;
+  box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.2);
+}
+
+.inputIcon {
+  position: absolute;
+  top: 2.5rem;
+  left: 0.75rem;
+  color: #94a3b8;
+}
+
+.forgotPassword {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #D35400;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.forgotPassword:hover {
+  color: #e67e22;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.75rem;
+  background: linear-gradient(to right, #D35400, #e67e22);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px rgba(211, 84, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(211, 84, 0, 0.25);
+  background: linear-gradient(to right, #e67e22, #D35400);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.errorText {
+  color: #dc2626;
+  font-size: 0.875rem;
+}
+
+.cardFooter {
+  padding: 0 2rem 2rem;
+}
+
+.registerLink {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.registerText {
+  color: #4b5563;
+}
+
+.linkHighlight {
+  color: #D35400;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.linkHighlight:hover {
+  color: #e67e22;
+}
+
+.divider {
+  border-top: 1px solid #e2e8f0;
+  margin: 1rem 0;
+}
+
+.legalText {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Animation classes */
+.fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.slideUp {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.slideInLeft {
+  animation: slideInLeft 0.5s ease-out forwards;
+}
+
+.slideInRight {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .loginCard {
+    background-color: rgba(30, 41, 59, 0.85);
   }
   
-  .formWrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
+  .inputLabel {
+    color: #f1f5f9;
   }
   
-  .formContent {
-    width: 100%;
-    max-width: 420px;
-    padding: 2rem;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  }
-  
-  .logoWrapper {
-    margin-bottom: 2rem;
-    text-align: center;
-  }
-  
-  .logo {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin: 0;
-  }
-  
-  .tagline {
-    color: #7f8c8d;
-    margin-top: 0.5rem;
-  }
-  
-  .title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .label {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #2c3e50;
-  }
-  
-  .input {
-    padding: 0.75rem 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.2s ease;
-  }
-  
-  .input:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
-  }
-  
-  .forgotPassword {
-    text-align: right;
-    margin-bottom: 1rem;
-  }
-  
-  .forgotPassword a {
-    color: #3498db;
-    text-decoration: none;
-    font-size: 0.9rem;
-  }
-  
-  .forgotPassword a:hover {
-    text-decoration: underline;
-  }
-  
-  .submitButton {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .submitButton:hover {
-    background-color: #2980b9;
-  }
-  
-  .submitButton:disabled {
-    background-color: #bdc3c7;
-    cursor: not-allowed;
-  }
-  
-  .errorMessage {
-    background-color: #ff6b6b;
-    color: white;
-    padding: 0.75rem;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-  }
-  
-  .registerLink {
-    margin-top: 1.5rem;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #7f8c8d;
+  .inputField {
+    background-color: rgba(30, 41, 59, 0.5);
+    border-color: #334155;
+    color: #f1f5f9;
   }
   
   .registerText {
-    color: #3498db;
-    cursor: pointer;
+    color: #d1d5db;
   }
   
-  .registerText:hover {
-    text-decoration: underline;
+  .divider {
+    border-color: #334155;
   }
   
-  .imageWrapper {
-    flex: 1;
-    background-image: url('/images/real-estate-background.jpg');
-    background-size: cover;
-    background-position: center;
-    display: none;
+  .legalText {
+    color: #9ca3af;
   }
-  
-  /* Media queries pour les écrans plus larges */
-  @media (min-width: 768px) {
-    .imageWrapper {
-      display: block;
-    }
-  }
-  
-  /* Animation subtile pour améliorer l'expérience utilisateur */
-  .formContent {
-    animation: fadeIn 0.5s ease-out;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+}

@@ -227,6 +227,16 @@
   background-color: #34495e;
 }
 
+.button.editButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.button.deleteButton {
+  background-color: #dc3545;
+  color: white;
+}
+
 /* Pagination */
 .pagination {
   display: flex;
@@ -913,4 +923,133 @@
   background-color: #f0f0f0;
   color: #666;
   font-size: 18px;
+}
+
+/* Ajoutez ces styles à votre fichier house.module.css existant */
+
+/* Styles pour le footer des cartes avec les boutons */
+.cardFooter {
+  margin-top: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
+/* Style de base des boutons */
+.button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  flex: 1;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* Styles spécifiques pour chaque type de bouton */
+.primary {
+  background-color: #3498db;
+  color: white;
+}
+
+.primary:hover {
+  background-color: #2980b9;
+}
+
+.secondary {
+  background-color: #27ae60;
+  color: white;
+}
+
+.secondary:hover {
+  background-color: #219653;
+}
+
+.editButton {
+  background-color: #f39c12;
+  color: white;
+}
+
+.editButton:hover {
+  background-color: #d35400;
+}
+
+.deleteButton {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.deleteButton:hover {
+  background-color: #c0392b;
+}
+
+/* Styles pour les boutons dans le modal (optionnel) */
+.modalActions {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modalActions .button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+/* Styles pour les boutons de pagination pour assurer la consistance */
+.pageButton {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background-color: white;
+  border-radius: 4px;
+  margin: 0 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pageButton:hover:not(.disabled) {
+  background-color: #f5f5f5;
+}
+
+.pageButton.active {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.pageButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Pour les écrans plus petits (mobile) */
+@media (max-width: 640px) {
+  .buttonRow {
+    flex-direction: column;
+  }
+  
+  .cardFooter {
+    gap: 5px;
+  }
+  
+  .button {
+    width: 100%;
+    margin-bottom: 5px;
+  }
 }

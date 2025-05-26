@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic"; // pour forcer l'exécution côté serve
 
 async function getRealEstateNews() {
   const apiKey = process.env.GNEWS_API_KEY;
-  const url = `https://gnews.io/api/v4/search?q=madagascar+immobilier&lang=fr&in=title&max=4&token=${apiKey}`;
+  const url = `https://gnews.io/api/v4/search?q=immobilier&lang=fr&in=title&max=4&token=${apiKey}`;
 
   const res = await fetch(url, { next: { revalidate: 0 } });
   if (!res.ok) throw new Error("Erreur lors du fetch des actus immobilières");
@@ -18,7 +18,7 @@ export default async function HomePage() {
   return (
     <main className="p-6 md:p-12 bg-gray-50 min-h-screen">
       <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-blue-700">
-        🏠 Actus immobilières à Madagascar
+        🏠 Actus immobilières 
       </h1>
 
       {news.length === 0 ? (

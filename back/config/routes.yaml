@@ -3,3 +3,8 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+maison_update:
+  path: /api/maisons/{id}
+  controller: App\Controller\MaisonLocationController::update
+  methods: [PUT]

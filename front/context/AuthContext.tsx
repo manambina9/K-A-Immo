@@ -1,74 +1,88 @@
-// context/AuthContext.tsx
-'use client'
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+'use client';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 interface User {
-  id: string;
-  username: string;
+  id: number;
   email: string;
-  roles: string[]; // Ajout des rôles
+  username: string;
+  roles: string[];
+  phone: string;
+  isVerified: boolean;
 }
 
-interface AuthContextType {
-  isAuthenticated: boolean;
-  user: User | null;
-  login: (token: string, userData: User) => void;
+export type AuthContextType = { 
+  isLoading: boolean;  
+  hasRole: (role: string) => boolean;
+  login: (token: string, user: any) => void;
   logout: () => void;
-  hasRole: (role: string) => boolean; // Nouvelle méthode pour vérifier les rôles
-}
+  isAuthenticated: boolean;
+  user: { id: number; roles: string[] } | null;
+};
+export const AuthContext = createContext<AuthContextType>({
+  isAuthenticated: false,
+  isLoading: true,
+  login: () => {},
+  logout: () => {},
+  hasRole: () => false,
+  user: null,
+});
 
-const AuthContext = createContext<AuthContextType | null>(null);
-
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    const userData = localStorage.getItem('userData');
-    
-    if (token && userData) {
-      setUser(JSON.parse(userData));
+    const storedToken = localStorage.getItem('token');
+    const storedUser = localStorage.getItem('user');
+    if (storedToken && storedUser) {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUser));
     }
+    setIsLoading(false);
   }, []);
 
-  const login = (token: string, userData: User) => {
-    localStorage.setItem('authToken', token);
-    localStorage.setItem('userData', JSON.stringify(userData));
-    setUser(userData);
+  const login = (token: string, user: User) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    setToken(token);
+    setUser(user);
   };
 
   const logout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userData');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setToken(null);
     setUser(null);
-    router.push('/login');
   };
 
-  // Vérifie si l'utilisateur a un rôle spécifique
   const hasRole = (role: string) => {
-    if (!user) return false;
-    return user.roles.includes(role);
+    // Replace with your actual role-checking logic
+    return !!user?.roles?.includes(role);
   };
+
+  const isAuthenticated = !!token;
 
   return (
-    <AuthContext.Provider value={{
-      isAuthenticated: !!user,
-      user,
-      login,
-      logout,
-      hasRole, // Ajout de la méthode
-    }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        isLoading,
+        login,
+        logout,
+        hasRole,
+        user: user ? { id: user.id, roles: user.roles } : null,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => {
+export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-};
+}

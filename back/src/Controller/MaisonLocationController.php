@@ -50,7 +50,7 @@ class MaisonLocationController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_maison_location_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_maison_location_edit', methods: ['GET', 'POST','PUT'])]
     public function edit(Request $request, MaisonLocation $maisonLocation, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MaisonLocationType::class, $maisonLocation);

@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation'; // Importer useRouter
+import { useRouter } from 'next/navigation'; 
 import { Check, MapPin, Home, Camera, ArrowRight, Upload, X } from 'lucide-react';
 
 interface FileWithPreview extends File {
@@ -27,18 +27,15 @@ export default function AddMaison() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formVisible, setFormVisible] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+ 
+  const primaryColor = '#D35400'; 
+  const secondaryColor = '#2C3E50';  
 
-  // Couleurs personnalisées
-  const primaryColor = '#D35400'; // Orange
-  const secondaryColor = '#2C3E50'; // Bleu foncé
-
-  useEffect(() => {
-    // Animation d'entrée du formulaire
+  useEffect(() => { 
     setTimeout(() => {
       setFormVisible(true);
     }, 300);
-
-    // Nettoyage des URLs d'aperçu
+ 
     return () => {
       images.forEach(image => URL.revokeObjectURL(image.preview));
     };
@@ -69,7 +66,7 @@ export default function AddMaison() {
       });
     });
     
-    setImages(prev => [...prev, ...newImages].slice(0, 10)); // Limite à 10 images
+    setImages(prev => [...prev, ...newImages].slice(0, 10)); 
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

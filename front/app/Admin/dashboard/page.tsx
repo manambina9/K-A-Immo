@@ -1,129 +1,234 @@
 'use client';
+import { useState, useEffect } from 'react';
+import Head from 'next/head';
+import styles from '../../../styles/Admin/dashboard.module.css';
+import Sidebar from '../../../component/Admin/sidebar'; 
+import Header from '../../../component/Admin/header';
 
-import { useState } from 'react';
-import { Home, Users, FileText, Tag, Settings, Calendar, MessageSquare, BarChart2, Shield, LogOut } from 'lucide-react';
-import { ProtectedRoute } from '../../../component/ProtectedRoute';
-
-// Importation des composants 
-import PropertiesContent from '../../../component/Admin/PropertiesContent';
-import ClientsContent from '../../../component/Admin/ClientsContent';
-import AgentsContent from '../../../component/Admin/AgentsContent';
-import AppointmentsContent from '../../../component/Admin/AppointmentsContent';
-import OffersContent from '../../../component/Admin/OffersContent';
-import MessagesContent from '../../../component/Admin/MessagesContent';
-import StatisticsContent from '../../../component/Admin/StatisticsContent';
-import SecurityContent from '../../../component/Admin/SecurityContent';
-import SettingsContent from '../../../component/Admin/SettingsContent';
-import DashboardContent from '../../../component/Admin/DashboardContent';
-import ClientHeader from '../../../component/client/ClientHeader'
-
-export function AdminDashboard() {
+const AdminDashboard = () => {
   const [activeMenu, setActiveMenu] = useState('dashboard');
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  type Property = { id: number; title: string; price: string; status: 'approved' | 'pending' | 'rejected'; date: string };
+  type Message = { id: number; name: string; email: string; message: string; date: string };
 
-  const menus = [
-    { id: 'dashboard', icon: <Home />, name: 'Tableau de bord' },
-    { id: 'properties', icon: <FileText />, name: 'Biens immobiliers' },
-    { id: 'clients', icon: <Users />, name: 'Clients' },
-    { id: 'agents', icon: <Users />, name: 'Agents' },
-    { id: 'appointments', icon: <Calendar />, name: 'Rendez-vous' },
-    { id: 'offers', icon: <Tag />, name: 'Offres' },
-    { id: 'messages', icon: <MessageSquare />, name: 'Messages' },
-    { id: 'statistics', icon: <BarChart2 />, name: 'Statistiques' },
-    { id: 'security', icon: <Shield />, name: 'Sécurité' },
-    { id: 'settings', icon: <Settings />, name: 'Paramètres' },
-  ];
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [stats, setStats] = useState({
+    totalProperties: 0,
+    activeListings: 0,
+    pendingApprovals: 0,
+    totalClients: 0
+  });
 
-  const renderContent = () => {
-    switch (activeMenu) {
-      case 'dashboard':
-        return <DashboardContent />;
-      case 'properties':
-        return <PropertiesContent />;
-      case 'clients':
-        return <ClientsContent />;
-      case 'agents':
-        return <AgentsContent />;
-      case 'appointments':
-        return <AppointmentsContent />;
-      case 'offers':
-        return <OffersContent />;
-      case 'messages':
-        return <MessagesContent />;
-      case 'statistics':
-        return <StatisticsContent />;
-      case 'security':
-        return <SecurityContent />;
-      case 'settings':
-        return <SettingsContent />;
-      default:
-        return <DashboardContent />;
-    }
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 992;
+      setIsMobile(mobile);
+      // Fermer automatiquement la sidebar en mode mobile
+      if (mobile && isSidebarOpen) {
+        setIsSidebarOpen(false);
+      } 
+      // Réouvrir automatiquement la sidebar en mode desktop
+      else if (!mobile && !isSidebarOpen) {
+        setIsSidebarOpen(true);
+      }
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    // Simuler le chargement des données
+    setTimeout(() => {
+      setStats({
+        totalProperties: 124,
+        activeListings: 87,
+        pendingApprovals: 12,
+        totalClients: 56
+      });
+      
+      setProperties([
+        { id: 1, title: 'Belle maison à Paris', price: '750 000€', status: 'approved', date: '2023-05-15' },
+        { id: 2, title: 'Appartement moderne Lyon', price: '350 000€', status: 'pending', date: '2023-05-18' },
+        { id: 3, title: 'Villa avec piscine Nice', price: '1 200 000€', status: 'approved', date: '2023-05-10' },
+        { id: 4, title: 'Studio étudiant Bordeaux', price: '180 000€', status: 'rejected', date: '2023-05-20' },
+        { id: 5, title: 'Maison de campagne Normandie', price: '320 000€', status: 'approved', date: '2023-05-12' }
+      ]);
+      
+      setMessages([
+        { id: 1, name: 'Jean Dupont', email: 'jean.dupont@email.com', message: 'Intéressé par la maison à Paris', date: '2023-05-21' },
+        { id: 2, name: 'Marie Martin', email: 'marie.martin@email.com', message: 'Question sur les frais de notaire', date: '2023-05-20' },
+        { id: 3, name: 'Pierre Durand', email: 'pierre.durand@email.com', message: 'Disponibilité pour une visite?', date: '2023-05-19' }
+      ]);
+    }, 1000);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isSidebarOpen]);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
-  return ( 
-    <>
-      <div className="flex h-screen bg-gray-100">
-        {/* Sidebar */}
-        <div className="w-64 bg-white shadow-md">
-          <div className="p-4 border-b">
-            <h1 className="text-xl font-bold text-blue-600">Immobilier Admin</h1>
-          </div>
-          <div className="p-4">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 bg-blue-200 rounded-full flex items-center justify-center">
-                <span className="text-blue-600 font-bold">A</span>
+  return (
+    <div className={styles.dashboardWrapper}>
+      <Head>
+        <title>Tableau de Bord Admin - Agence Immobilière</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+      </Head>
+      
+      <Header />
+      
+      <div className={styles.container}>
+        <Sidebar 
+          isOpen={isSidebarOpen} 
+          activeMenu={activeMenu} 
+          setActiveMenu={setActiveMenu}
+          toggleSidebar={toggleSidebar}
+        />
+        
+        {isMobile && (
+          <button 
+            className={styles.sidebarToggle} 
+            onClick={toggleSidebar}
+            aria-label="Toggle Sidebar"
+          >
+            <i className={`fas ${isSidebarOpen ? 'fa-times' : 'fa-bars'}`}></i>
+          </button>
+        )}
+        
+        {/* Contenu principal */}
+        <div className={`${styles.mainContent} ${!isSidebarOpen ? styles.expanded : ''}`}>     
+          <div className={styles.statsContainer}>
+            <div className={`${styles.statCard} ${styles.animatedCard}`}>
+              <div className={styles.statIcon}>
+                <i className="fas fa-home"></i>
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium">Admin User</p>
-                <p className="text-xs text-gray-500">admin@example.com</p>
-              </div>
+              <div className={styles.statValue}>{stats.totalProperties}</div>
+              <div className={styles.statLabel}>Biens immobiliers</div>
             </div>
-
-            <nav className="mt-6">
-              <ul>
-                {menus.map((menu) => (
-                  <li key={menu.id} className="mb-2">
-                    <button
-                      onClick={() => setActiveMenu(menu.id)}
-                      className={`flex items-center w-full px-4 py-2 rounded-md ${
-                        activeMenu === menu.id
-                          ? 'bg-blue-100 text-blue-600'
-                          : 'hover:bg-gray-100'
-                      }`}
-                    >
-                      <span className="mr-3">{menu.icon}</span>
-                      <span>{menu.name}</span>
-                    </button>
-                  </li>
+            
+            <div className={`${styles.statCard} ${styles.animatedCard}`}>
+              <div className={styles.statIcon}>
+                <i className="fas fa-check-circle"></i>
+              </div>
+              <div className={styles.statValue}>{stats.activeListings}</div>
+              <div className={styles.statLabel}>Annonces actives</div>
+            </div>
+            
+            <div className={`${styles.statCard} ${styles.animatedCard}`}>
+              <div className={styles.statIcon}>
+                <i className="fas fa-clock"></i>
+              </div>
+              <div className={styles.statValue}>{stats.pendingApprovals}</div>
+              <div className={styles.statLabel}>En attente</div>
+            </div>
+            
+            <div className={`${styles.statCard} ${styles.animatedCard}`}>
+              <div className={styles.statIcon}>
+                <i className="fas fa-users"></i>
+              </div>
+              <div className={styles.statValue}>{stats.totalClients}</div>
+              <div className={styles.statLabel}>Clients</div>
+            </div>
+          </div>
+          
+          {/* Derniers biens immobiliers */}
+          <div className={styles.tableContainer}>
+            <div className={styles.tableHeader}>
+              <h3>Derniers biens immobiliers</h3>
+              <button className={`${styles.btn} ${styles.btnPrimary}`}>
+                Voir tout <i className="fas fa-arrow-right"></i>
+              </button>
+            </div>
+            
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Titre</th>
+                  <th>Prix</th>
+                  <th>Statut</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {properties.map(property => (
+                  <tr key={property.id}>
+                    <td>{property.id}</td>
+                    <td>{property.title}</td>
+                    <td>{property.price}</td>
+                    <td>
+                      <span className={`${styles.status} ${styles[property.status]}`}>
+                        {property.status === 'approved' ? 'Approuvé' : 
+                         property.status === 'pending' ? 'En attente' : 'Rejeté'}
+                      </span>
+                    </td>
+                    <td>{property.date}</td>
+                    <td>
+                      <button className={`${styles.btn} ${styles.btnSecondary}`} style={{ marginRight: '5px' }}>
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      <button className={`${styles.btn} ${styles.btnPrimary}`}>
+                        <i className="fas fa-eye"></i>
+                      </button>
+                    </td>
+                  </tr>
                 ))}
-                <li className="mt-6">
-                  <button className="flex items-center w-full px-4 py-2 text-red-500 hover:bg-red-50 rounded-md">
-                    <LogOut className="mr-3" />
-                    <span>Déconnexion</span>
-                  </button>
-                </li>
-              </ul>
-            </nav>
+              </tbody>
+            </table>
+          </div>
+          
+          {/* Graphique (simulé) */}
+          <div className={styles.chartContainer}>
+            <div className={styles.chartHeader}>
+              <h3>Activité récente</h3>
+            </div>
+            <div className={styles.chartPlaceholder}>
+              <p>Graphique des activités serait affiché ici</p>
+            </div>
+          </div>
+          
+          {/* Derniers messages */}
+          <div className={styles.tableContainer}>
+            <div className={styles.tableHeader}>
+              <h3>Derniers messages</h3>
+              <button className={`${styles.btn} ${styles.btnPrimary}`}>
+                Voir tout <i className="fas fa-arrow-right"></i>
+              </button>
+            </div>
+            
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Email</th>
+                  <th>Message</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {messages.map(message => (
+                  <tr key={message.id}>
+                    <td>{message.name}</td>
+                    <td>{message.email}</td>
+                    <td>{message.message.substring(0, 50)}...</td>
+                    <td>{message.date}</td>
+                    <td>
+                      <button className={`${styles.btn} ${styles.btnPrimary}`}>
+                        <i className="fas fa-reply"></i> Répondre
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-
-        {/* Main Content */}
-        <div className="flex-1 overflow-auto">
-          <header className="bg-white shadow-sm">
-            <div className="px-6 py-4">
-              <h2 className="text-xl font-semibold text-gray-800">
-                {menus.find(menu => menu.id === activeMenu)?.name || 'Tableau de bord'}
-              </h2>
-            </div>
-          </header>
-
-          <main className="p-6">
-            {renderContent()}
-          </main>
-        </div>
-      </div> 
-    </>
+      </div>
+    </div>
   );
-}
+};
 
 export default AdminDashboard;

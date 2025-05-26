@@ -198,6 +198,28 @@ export default function ApiLocation() {
     return pages;
   };
 
+  const deleteMaison = async (id: number) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/maisons/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Erreur lors de la suppression : ${response.status}`);
+      }
+  
+      // Mettre à jour la liste des maisons après suppression
+      setAllMaisons((prev) => prev.filter((maison) => maison.id !== id));
+      alert('Maison supprimée avec succès.');
+    } catch (err) {
+      console.error('Erreur lors de la suppression de la maison:', err);
+      alert('Une erreur est survenue lors de la suppression.');
+    }
+  };
+
   return (
     <>
       <Header />
@@ -274,17 +296,63 @@ export default function ApiLocation() {
                   </div>
                 </div>
                 <div className={styles.cardFooter}>
-                  <button
-                    className={`${styles.button} ${styles.primary}`}
-                    onClick={() => openModal(maison)}
-                  >
-                    Voir les détails
-                  </button>
-                  {maison.disponible && (
-                    <button className={`${styles.button} ${styles.secondary}`}>
-                      Contacter
+                  <div className={styles.buttonRow}>
+                    <button
+                      className={`${styles.button} ${styles.primary}`}
+                      onClick={() => openModal(maison)}
+                    >
+                      Voir les détails
                     </button>
-                  )}
+                    {maison.disponible && (
+                      <button className={`${styles.button} ${styles.secondary}`}>
+                        Contacter
+                      </button>
+                    )}
+                  </div>
+                  <div className={styles.buttonRow}>
+                    <button
+                      className={`${styles.button} ${styles.editButton}`}
+                      onClick={() => {
+                        window.location.href = `/Admin/apiLocation/edit/${maison.id}`;
+                      }}
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      className={`${styles.button} ${styles.deleteButton}`}
+                      onClick={async () => {
+                        if (window.confirm('Êtes-vous sûr de vouloir supprimer cette maison ?')) {
+                          try {
+                            console.log('ID de la maison à supprimer :', maison.id);
+
+                            const response = await fetch(`http://127.0.0.1:8000/api/maisons/${maison.id}`, {
+                              method: 'DELETE',
+                              headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                              },
+                              body: JSON.stringify({ id: maison.id }), // Ajoutez ceci si nécessaire
+                            });
+
+                            if (!response.ok) {
+                              const errorText = await response.text();
+                              console.error(`Erreur lors de la suppression : ${response.status}`, errorText);
+                              throw new Error(`Erreur lors de la suppression : ${response.status}`);
+                            }
+
+                            // Mettre à jour la liste des maisons après suppression
+                            setAllMaisons((prev) => prev.filter((m) => m.id !== maison.id));
+                            alert('Maison supprimée avec succès.');
+                          } catch (err) {
+                            console.error('Erreur lors de la suppression de la maison:', err);
+                            alert('Une erreur est survenue lors de la suppression.');
+                          }
+                        }
+                      }}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
