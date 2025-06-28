@@ -73,4 +73,5 @@ php bin/console debug:router
 📢 Section “actualités” ou blog immobilier
 
 🌐 Multilingue ? (utile si site destiné à un public large ou touristique)
+docker start mysql
 
